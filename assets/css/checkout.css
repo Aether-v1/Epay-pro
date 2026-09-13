@@ -641,3 +641,120 @@
 .epay-card input, .epay-card button, .epay-card select,
 .epay-status input, .epay-status button,
 .epay-transition input, .epay-transition button { font-family: inherit; }
+
+
+/* ---------- 23. QR Payment Page（Phase 2-C） ----------
+   二维码支付页统一组件：支付宝 / 微信共用结构，渠道差异仅用 modifier
+   旧 JS selector（.guide/.open_app/.btn-open-app/.btn-check/#orderDetail/.detail-ct/.arrow/.mobile-btn/.mobile-tip/#copy-btn/.foot）全部保留，样式作用域限定在本页内 */
+.epay-qr-page .epay-card { max-width: 560px; padding: 34px 36px 30px; }
+.epay-qr-page__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--epay-text);
+  margin: 0 0 4px;
+}
+.epay-qr-page__title .epay-channel-ico {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.epay-channel--alipay .epay-channel-ico { background: #1677FF; }
+.epay-channel--wechat .epay-channel-ico { background: #07C160; }
+.epay-channel-ico svg { width: 15px; height: 15px; display: block; }
+.epay-qr-page__subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: var(--epay-text-3);
+  margin: 0 0 20px;
+}
+.epay-qr__help { font-size: 14px; color: var(--epay-text-2); margin: 14px 0 0; text-align: center; }
+.epay-qr__status { margin-top: 12px; }
+.epay-qr__status .epay-dot { animation: epay-dot-pulse 1.6s ease-in-out infinite; }
+.epay-qr__status.is-paid .epay-dot { animation: none; }
+@keyframes epay-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .45; transform: scale(.82); }
+}
+/* 旧 JS selector 兼容样式（作用域限定 .epay-qr-page 内，不污染其它页面） */
+.epay-qr-page .top-guide { position: fixed; top: 0; left: 0; right: 0; z-index: 99; width: 100%; background: rgba(255,255,255,.98); }
+.epay-qr-page .guide {
+  position: fixed; inset: 0; z-index: 98;
+  background: rgba(15, 23, 42, .72);
+  display: flex; align-items: center; justify-content: center;
+}
+.epay-qr-page .guide img { width: 86%; max-width: 420px; border-radius: 14px; }
+.epay-qr-page .open_app { display: flex; flex-direction: column; gap: 12px; margin: 18px 0 2px; }
+.epay-qr-page .btn-open-app,
+.epay-qr-page .btn-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; width: 100%; min-height: 48px;
+  border-radius: var(--epay-radius-md);
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: background var(--epay-ease), border-color var(--epay-ease);
+}
+.epay-qr-page .btn-open-app { background: var(--epay-primary); color: #fff; }
+.epay-qr-page .btn-open-app:hover { background: var(--epay-primary-hover); }
+.epay-qr-page .btn-check {
+  background: var(--epay-surface); color: var(--epay-text-2);
+  border: 1px solid var(--epay-border-strong); margin-top: 2px;
+}
+.epay-qr-page .btn-check:hover { border-color: var(--epay-primary); color: var(--epay-primary); }
+/* 订单详情折叠（旧 #orderDetail 结构） */
+.epay-qr-page .detail { text-align: center; margin-top: 16px; }
+.epay-qr-page .detail .arrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--epay-text-3); font-size: 13px; text-decoration: none;
+  padding: 8px 14px; border-radius: 999px;
+  transition: color var(--epay-ease);
+}
+.epay-qr-page .detail .arrow:hover { color: var(--epay-primary); }
+.epay-qr-page .detail-ct {
+  display: none; margin: 10px auto 0; padding: 12px 16px; max-width: 360px;
+  background: var(--epay-bg); border: 1px solid var(--epay-border);
+  border-radius: var(--epay-radius-md); text-align: left;
+  font-size: 13px; color: var(--epay-text-2); overflow: hidden;
+}
+.epay-qr-page .detail-ct dt { float: left; clear: left; color: var(--epay-text-3); margin-right: 8px; }
+.epay-qr-page .detail-ct dd { margin: 0 0 6px; overflow-wrap: break-word; word-break: break-all; }
+/* 微信移动端复制区（旧 .mobile-btn / .mobile-tip / #copy-btn） */
+.epay-qr-page .mobile-btn { margin: 18px 0 2px; }
+.epay-qr-page .mobile-tip {
+  font-size: 12px; color: var(--epay-warning);
+  background: var(--epay-warning-soft); border: 1px solid rgba(245, 158, 11, .25);
+  padding: 10px 12px; border-radius: var(--epay-radius-sm);
+  line-height: 1.6; margin-bottom: 10px;
+}
+.epay-qr-page #copy-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 48px; box-sizing: border-box;
+  border-radius: var(--epay-radius-md);
+  background: var(--epay-primary); color: #fff;
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  cursor: pointer; border: 0; text-decoration: none;
+  transition: background var(--epay-ease);
+}
+.epay-qr-page #copy-btn:hover { background: var(--epay-primary-hover); }
+.epay-qr-page .foot { text-align: center; font-size: 12px; color: var(--epay-text-3); margin-top: 20px; line-height: 1.7; }
+/* 移动端适配（360~430 无横向滚动） */
+@media (max-width: 640px) {
+  .epay-qr-page .epay-card { padding: 26px 20px 24px; }
+  .epay-qr-page__title { font-size: 17px; }
+}
+/* 深色模式下旧引导遮罩保持可读 */
+@media (prefers-color-scheme: dark) {
+  .epay-qr-page .guide { background: rgba(0, 0, 0, .78); }
+  .epay-qr-page .top-guide { background: rgba(17, 24, 39, .98); }
+}
+/* Reduced motion：关闭状态点脉冲 */
+@media (prefers-reduced-motion: reduce) {
+  .epay-qr__status .epay-dot { animation: none; }
+}
