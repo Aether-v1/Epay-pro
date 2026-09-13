@@ -1,40 +1,29 @@
 <?php
 if(!defined('IN_CRONLITE'))exit();
-?><html class="weui-msg">
+?>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>确认收款页面</title>
-    <link href="/assets/css/weui.min.css" rel="stylesheet">
-    <style>.page{position:absolute;top:0;right:0;bottom:0;left:0;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}</style>
+    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
 </head>
-<body>
-<div class="container">
-<div class="page">
-<div class="weui-msg">
-    <div class="weui-msg__icon-area" style="margin-top:20px">
-        <i class="weui-icon-success weui-icon_msg"></i>
+<body class="epay-page">
+<div class="epay-card epay-status-card">
+    <div class="epay-status epay-status--success">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+        <h1>你已收款，资金已存入零钱</h1>
     </div>
-    <div class="weui-msg__text-area">
-        <h2 class="weui-msg__title"><span style="font-size:18px;">你已收款，资金已存入零钱</span></h2>
-		<p class="weui-msg__desc"><span style="font-size:34px;font-weight:700;line-height: 64px;">¥</span><span style="font-size:44px;font-weight:700;vertical-align:top;"><?php echo $money?></span></p>
-        <div class="weui-msg__custom-area">
-            <ul class="weui-form-preview__list">
-                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">转账时间</label><p class="weui-form-preview__value weui-cell__ft"><?php echo $addtime?></p></li>
-                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">收款时间</label><p class="weui-form-preview__value weui-cell__ft"><?php echo $paytime?></p></li>
-            </ul>
-        </div>
+    <div class="epay-amount">
+        <span class="epay-amount__currency">¥</span><span class="epay-amount__value"><?php echo htmlspecialchars($money, ENT_QUOTES, 'UTF-8'); ?></span>
     </div>
-    <div class="weui-msg__opr-area">
-        <p class="weui-btn-area">
-            <a href="javascript:;" class="weui-btn weui-btn_default" id="Close">关闭</a>
-        </p>
+    <div class="epay-order-meta">
+        <div class="epay-order-meta__row"><span class="epay-order-meta__label">转账时间</span><span class="epay-order-meta__value"><?php echo htmlspecialchars($addtime, ENT_QUOTES, 'UTF-8'); ?></span></div>
+        <div class="epay-order-meta__row"><span class="epay-order-meta__label">收款时间</span><span class="epay-order-meta__value"><?php echo htmlspecialchars($paytime, ENT_QUOTES, 'UTF-8'); ?></span></div>
     </div>
-    <div class="weui-msg__extra-area">
-        <div class="weui-footer"><p class="weui-footer__links"></p><p class="weui-footer__text">Copyright © <?php echo date("Y")?> <?php echo $conf['sitename']?></p></div>
-    </div>
-</div>
-</div>
+    <a href="javascript:;" class="epay-btn epay-btn--primary epay-btn--block" id="Close">关闭</a>
+    <div class="epay-footer">Copyright © <?php echo date("Y")?> <?php echo htmlspecialchars($conf['sitename'], ENT_QUOTES, 'UTF-8'); ?></div>
 </div>
 <script src="<?php echo $cdnpublic?>jquery/1.12.4/jquery.min.js"></script>
 <script>

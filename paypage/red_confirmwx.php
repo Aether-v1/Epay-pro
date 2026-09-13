@@ -1,64 +1,50 @@
 <?php
 if(!defined('IN_CRONLITE'))exit();
-?><html class="weui-msg">
+$jsBizNo = json_encode($biz_no, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$jsTime = json_encode($time, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$jsSign = json_encode($sign, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$jsOpenid = json_encode($openid, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+?>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>红包领取确认</title>
-    <link href="/assets/css/weui.min.css" rel="stylesheet">
-    <style>.page{position:absolute;top:0;right:0;bottom:0;left:0;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}</style>
+    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
 </head>
-<body>
-<div class="container">
-<div class="page">
-<div class="weui-msg">
-    <div class="weui-msg__icon-area" style="margin-top:20px">
-        <i class="weui-icon-waiting weui-icon_msg"></i>
+<body class="epay-page">
+<div class="epay-card epay-status-card">
+    <div class="epay-status epay-status--waiting">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <h1>待你收款</h1>
     </div>
-    <div class="weui-msg__text-area">
-        <h2 class="weui-msg__title"><span style="font-size:18px;">待你收款</span></h2>
-		<p class="weui-msg__desc"><span style="font-size:34px;font-weight:700;line-height: 64px;">¥</span><span style="font-size:44px;font-weight:700;vertical-align:top;"><?php echo $trans['money']?></span></p>
-        <div class="weui-msg__custom-area">
-            <ul class="weui-form-preview__list">
-                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">创建时间</label><p class="weui-form-preview__value weui-cell__ft"><?php echo $trans['addtime']?></p></li>
-            </ul>
-        </div>
+    <div class="epay-amount">
+        <span class="epay-amount__currency">¥</span><span class="epay-amount__value"><?php echo htmlspecialchars($trans['money'], ENT_QUOTES, 'UTF-8'); ?></span>
     </div>
-    <div class="weui-msg__opr-area">
-        <p class="weui-btn-area">
-            <a href="javascript:;" class="weui-btn weui-btn_primary" id="Confirm" disabled>收款</a>
-        </p>
+    <div class="epay-order-meta">
+        <div class="epay-order-meta__row"><span class="epay-order-meta__label">创建时间</span><span class="epay-order-meta__value"><?php echo htmlspecialchars($trans['addtime'], ENT_QUOTES, 'UTF-8'); ?></span></div>
     </div>
-    <div class="weui-msg__tips-area">
-        <p class="weui-msg__tips">请在24小时内确认</p>
-    </div>
-    <div class="weui-msg__extra-area">
-        <div class="weui-footer"><p class="weui-footer__links"></p><p class="weui-footer__text">Copyright © <?php echo date("Y")?> <?php echo $conf['sitename']?></p></div>
-    </div>
+    <a href="javascript:;" class="epay-btn epay-btn--primary epay-btn--block" id="Confirm" disabled>收款</a>
+    <p class="epay-status__tip">请在24小时内确认</p>
+    <div class="epay-footer">Copyright © <?php echo date("Y")?> <?php echo htmlspecialchars($conf['sitename'], ENT_QUOTES, 'UTF-8'); ?></div>
 </div>
-    <div role="alert" id="loadingToast">
-        <div class="weui-mask_transparent"></div>
-        <div class="weui-toast__wrp">
-          <div class="weui-toast">
-              <span class="weui-primary-loading weui-icon_toast">
-                <span class="weui-primary-loading__dot"></span>
-              </span>
-              <p class="weui-toast__content">正在加载</p>
-          </div>
+    <div role="alert" id="loadingToast" class="epay-toast" style="display: none;">
+        <div class="epay-toast__box">
+            <span class="epay-toast__spinner"></span>
+            <p class="epay-toast__text">正在加载</p>
         </div>
     </div>
-    <div class="js_dialog" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="dialog_title" id="iosDialog" style="display: none;">
-        <div class="weui-mask"></div>
-        <div class="weui-dialog">
-            <div class="weui-dialog__hd"><strong class="weui-dialog__title" id="dialog_title">提示</strong></div>
-            <div class="weui-dialog__bd" id="dialog_content"></div>
-            <div class="weui-dialog__ft">
-                <a role="button" href="javascript:" id="dialogClose" class="weui-dialog__btn weui-dialog__btn_primary">关闭</a>
+    <div class="epay-dialog" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="dialog_title" id="iosDialog" style="display: none;">
+        <div class="epay-dialog__mask"></div>
+        <div class="epay-dialog__box">
+            <div class="epay-dialog__title" id="dialog_title">提示</div>
+            <div class="epay-dialog__bd" id="dialog_content"></div>
+            <div class="epay-dialog__ft">
+                <a role="button" href="javascript:" id="dialogClose" class="epay-dialog__btn">关闭</a>
             </div>
         </div>
     </div>
-</div>
-</div>
 <script src="<?php echo $cdnpublic?>jquery/1.12.4/jquery.min.js"></script>
 <script src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 <script>
@@ -80,8 +66,6 @@ wx.ready(function () {
   });
 });
 wx.error(function(res){
-  //$('#loadingToast').fadeOut(100);
-  //alert(res.errMsg);
 });
 function showDialog(title, content) {
     $('#dialog_title').text(title);
@@ -110,7 +94,7 @@ $(document).ready(function(){
     $.ajax({
       type: "POST",
       url: "./red_ajax.php",
-      data: {n: "<?php echo $biz_no?>", t: "<?php echo $time?>", s: "<?php echo $sign?>", openid: "<?php echo $openid?>"},
+      data: {n: <?php echo $jsBizNo; ?>, t: <?php echo $jsTime; ?>, s: <?php echo $jsSign; ?>, openid: <?php echo $jsOpenid; ?>},
       dataType: "json",
       success: function(response) {
         $('#loadingToast').fadeOut(100);
