@@ -1950,3 +1950,41 @@ function admin_audit_log($action, $detail = '', $admin_id = null) {
         // 审计日志失败不影响主流程
     }
 }
+
+// ===== USDT-TRC20 结算支持（增量扩展，不影响既有结算方式） =====
+/**
+ * 校验 USDT-TRC20 收款地址（TRON 主网 Base58 地址）
+ * 规则：34 字符、T 开头、Base58 字符集、末 4 字节为前 21 字节的双 SHA256 校验和
+ * @param string $address
+ * @return bool
+ */
+if(!function_exists('is_usdt_tron_address')){
+	function is_usdt_tron_address($address){
+		$address = trim((string)$address);
+		if(strlen($address) !== 34) return false;
+		if($address[0] !== 'T') return false;
+		$alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+		if(strspn($address, $alphabet) !== 34) return false;
+		$num = '0';
+		for($i = 0; $i < 34; $i++){
+			$p = strpos($alphabet, $address[$i]);
+			if($p === false) return false;
+			$num = bcadd(bcmul($num, '58', 0), (string)$p, 0);
+		}
+		$hex = '';
+		while(bccomp($num, '0', 0) > 0){
+			$hex = dechex((int)bcmod($num, '16', 0)) . $hex;
+			$num = bcdiv($num, '16', 0);
+		}
+		$leading = 34 - strlen(ltrim($address, '1'));
+		$hex = str_repeat('00', $leading) . $hex;
+		if(strlen($hex) % 2 !== 0) $hex = '0' . $hex;
+		$binary = hex2bin($hex);
+		if($binary === false || strlen($binary) !== 25) return false;
+		if($binary[0] !== "\x41") return false; // TRON 主网前缀 0x41
+		$payload = substr($binary, 0, 21);
+		$checksum = substr($binary, 21, 4);
+		$calc = substr(hash('sha256', hash('sha256', $payload, true), true), 0, 4);
+		return hash_equals($checksum, $calc);
+	}
+}

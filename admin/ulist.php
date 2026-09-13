@@ -195,8 +195,8 @@ $(document).ready(function(){
 				field: 'settle_id',
 				title: '结算账号/姓名',
 				formatter: function(value, row, index) {
-					var type_arr = {1:'alipay',2:'wxpay',3:'qqpay',4:'bank'};
-					return row.account ? '<span onclick="inputInfo('+row.uid+')" title="点击修改结算账号">'+(value==2?'<font color="green">WX:</font>':'')+(value==3?'<font color="green">QQ:</font>':'')+row.account+'<br/>'+row.username+'</span> <a href="./transfer_add.php?app='+type_arr[value]+'&account='+row.account+'&username='+row.username+'" target="_blank"><i class="fa fa-send-o fa-fw"></i></a>' : '<span onclick="inputInfo('+row.uid+')" title="点击修改结算账号">未设置</span>';
+					var type_arr = {1:'alipay',2:'wxpay',3:'qqpay',4:'bank',5:'usdt'};
+					return row.account ? '<span onclick="inputInfo('+row.uid+')" title="点击修改结算账号">'+(value==2?'<font color="green">WX:</font>':'')+(value==3?'<font color="green">QQ:</font>':'')+(value==5?'<font color="green">USDT:</font>':'')+row.account+'<br/>'+row.username+'</span> '+(value==5?'<span class="text-muted">[人工结算]</span>':'<a href="./transfer_add.php?app='+type_arr[value]+'&account='+row.account+'&username='+row.username+'" target="_blank"><i class="fa fa-send-o fa-fw"></i></a>') : '<span onclick="inputInfo('+row.uid+')" title="点击修改结算账号">未设置</span>';
 				}
 			},
 			{

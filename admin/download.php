@@ -16,6 +16,8 @@ function display_type($type){
 		return 'QQ钱包';
 	elseif($type==4)
 		return '银行卡';
+	elseif($type==5)
+		return 'USDT-TRC20';
 	else
 		return 1;
 }

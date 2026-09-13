@@ -414,6 +414,8 @@ break;
 
 case 'addUser':
 	$key = random(32);
+	if(!in_array(intval($_POST['settle_id']), [1,2,3,4,5])) exit('{"code":-1,"msg":"不支持的结算方式"}');
+	if(intval($_POST['settle_id'])==5 && trim($_POST['account'])!=='' && !is_usdt_tron_address(trim($_POST['account']))) exit('{"code":-1,"msg":"USDT 收款地址格式不正确"}');
 	$data = [
 		'gid' => intval($_POST['gid']),
 		'key' => $key,
@@ -461,6 +463,8 @@ case 'editUser':
 	$uid=intval($_GET['uid']);
 	$rows=$DB->getRow("select * from pre_user where uid='$uid' limit 1");
 	if(!$rows) exit('{"code":-1,"msg":"当前商户不存在！"}');
+	if(!in_array(intval($_POST['settle_id']), [1,2,3,4,5])) exit('{"code":-1,"msg":"不支持的结算方式"}');
+	if(intval($_POST['settle_id'])==5 && trim($_POST['account'])!=='' && !is_usdt_tron_address(trim($_POST['account']))) exit('{"code":-1,"msg":"USDT 收款地址格式不正确"}');
 	$data = [
 		'gid' => intval($_POST['gid']),
 		'upid' => intval($_POST['upid']),
@@ -584,7 +588,7 @@ case 'user_settle_info':
 	$rows=$DB->getRow("select * from pre_user where uid='$uid' limit 1");
 	if(!$rows)
 		exit('{"code":-1,"msg":"当前用户不存在！"}');
-	$data = '<div class="form-group"><div class="input-group"><div class="input-group-addon">结算方式</div><select class="form-control" id="pay_type" default="'.$rows['settle_id'].'">'.($conf['settle_alipay']?'<option value="1">支付宝</option>':null).''.($conf['settle_wxpay']?'<option value="2">微信</option>':null).''.($conf['settle_qqpay']?'<option value="3">QQ钱包</option>':null).''.($conf['settle_bank']?'<option value="4">银行卡</option>':null).'</select></div></div>';
+	$data = '<div class="form-group"><div class="input-group"><div class="input-group-addon">结算方式</div><select class="form-control" id="pay_type" default="'.$rows['settle_id'].'">'.($conf['settle_alipay']?'<option value="1">支付宝</option>':null).''.($conf['settle_wxpay']?'<option value="2">微信</option>':null).''.($conf['settle_qqpay']?'<option value="3">QQ钱包</option>':null).''.($conf['settle_bank']?'<option value="4">银行卡</option>':null).($conf['settle_usdt']?'<option value="5">USDT-TRC20</option>':null).'</select></div></div>';
 	$data .= '<div class="form-group"><div class="input-group"><div class="input-group-addon">结算账号</div><input type="text" id="pay_account" value="'.$rows['account'].'" class="form-control" required/></div></div>';
 	$data .= '<div class="form-group"><div class="input-group"><div class="input-group-addon">真实姓名</div><input type="text" id="pay_name" value="'.$rows['username'].'" class="form-control" required/></div></div>';
 	$data .= '<input type="submit" id="save" onclick="saveInfo('.$uid.')" class="btn btn-primary btn-block" value="保存">';
@@ -596,6 +600,8 @@ case 'user_settle_save':
 	$pay_type=trim(daddslashes($_POST['pay_type']));
 	$pay_account=trim(daddslashes($_POST['pay_account']));
 	$pay_name=trim(daddslashes($_POST['pay_name']));
+	if(!in_array(intval($pay_type), [1,2,3,4,5])) exit('{"code":-1,"msg":"不支持的结算方式"}');
+	if(intval($pay_type)==5 && !is_usdt_tron_address($pay_account)) exit('{"code":-1,"msg":"请填写正确的 USDT-TRC20 收款地址"}');
 	$sds=$DB->exec("update `pre_user` set `settle_id`='$pay_type',`account`='$pay_account',`username`='$pay_name' where `uid`='$uid'");
 	if($sds!==false)
 		exit('{"code":0,"msg":"修改记录成功！"}');

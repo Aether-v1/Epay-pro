@@ -244,6 +244,7 @@ case 'verifycode':
 break;
 case 'completeinfo':
 	$type=intval($_POST['stype']);
+	if(!in_array($type, [1,2,3,4,5])){ exit('{"code":-1,"msg":"不支持的结算方式"}'); }
 	$account=htmlspecialchars(strip_tags(trim($_POST['account'])));
 	$username=htmlspecialchars(strip_tags(trim($_POST['username'])));
 	$email=htmlspecialchars(strip_tags(trim($_POST['email'])));
@@ -264,6 +265,9 @@ case 'completeinfo':
 	}
 	if($type==3 && (strlen($account)<5 || strlen($account)>10 || !is_numeric($account))){
 		exit('{"code":-1,"msg":"请填写正确的QQ号码"}');
+	}
+	if($type==5 && !is_usdt_tron_address($account)){
+		exit('{"code":-1,"msg":"请填写正确的 USDT-TRC20 收款地址"}');
 	}
 	if(strlen($qq)<5 || strlen($qq)>10 || !is_numeric($qq)){
 		exit('{"code":-1,"msg":"请填写正确的QQ"}');
@@ -293,6 +297,7 @@ case 'completeinfo':
 break;
 case 'edit_settle':
 	$type=intval($_POST['stype']);
+	if(!in_array($type, [1,2,3,4,5])){ exit('{"code":-1,"msg":"不支持的结算方式"}'); }
 	$account=htmlspecialchars(strip_tags(trim($_POST['account'])));
 	$username=htmlspecialchars(strip_tags(trim($_POST['username'])));
 
@@ -307,6 +312,9 @@ case 'edit_settle':
 	}
 	if($type==3 && (strlen($account)<5 || strlen($account)>10 || !is_numeric($account))){
 		exit('{"code":-1,"msg":"请填写正确的QQ号码"}');
+	}
+	if($type==5 && !is_usdt_tron_address($account)){
+		exit('{"code":-1,"msg":"请填写正确的 USDT-TRC20 收款地址"}');
 	}
 	if($userrow['type']!=2 && !empty($userrow['account']) && !empty($userrow['username']) && ($userrow['account']!=$account || $userrow['username']!=$username) && $_SESSION['verify_ok']!==$uid){
 		if($conf['verifytype']==1 && (empty($userrow['phone']) || strlen($userrow['phone'])!=11)){

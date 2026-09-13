@@ -34,6 +34,7 @@ include './head.php';
 						<?php }if($conf['settle_wxpay']){?><option value="2" input="<?php echo $conf['transfer_wxpay']?'微信OpenId':'微信号';?>">微信结算</option>
 						<?php }if($conf['settle_qqpay']){?><option value="3" input="ＱＱ号码">QQ钱包结算</option>
 						<?php }if($conf['settle_bank']){?><option value="4" input="银行卡号">银行卡结算</option>
+						<?php }if($conf['settle_usdt']){?><option value="5" input="USDT 收款地址">USDT结算（TRC20）</option>
 						<?php }?></select>
 					</div>
 				</div>
@@ -41,6 +42,7 @@ include './head.php';
 					<label class="col-sm-2 control-label" id="typename">收款账号</label>
 					<div class="col-sm-9">
 						<input class="form-control" type="text" name="account" value="<?php echo $userrow['account']?>">
+						<span class="help-block" id="usdt_tip" style="display:none;">仅支持 USDT-TRC20，请勿填写其他网络地址</span>
 					</div>
 				</div>
 				<?php if($conf['transfer_wxpay']){?>
@@ -98,6 +100,11 @@ $(document).ready(function(){
 			$("#getopenid_form").show();
 		}else{
 			$("#getopenid_form").hide();
+		}
+		if($(this).val() == 5){
+			$("#usdt_tip").show();
+		}else{
+			$("#usdt_tip").hide();
 		}
 	});
 	$("select[name='stype']").change();

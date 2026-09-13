@@ -957,6 +957,10 @@ $("select[name='pay_verify']").change(function(){
 	  <div class="col-sm-9"><select class="form-control" name="settle_bank" default="<?php echo $conf['settle_bank']?>"><option value="0">关闭</option><option value="1">开启</option></select></div>
 	</div><br/>
 	<div class="form-group">
+	  <label class="col-sm-3 control-label">USDT结算开关</label>
+	  <div class="col-sm-9"><select class="form-control" name="settle_usdt" default="<?php echo $conf['settle_usdt']?>"><option value="0">关闭</option><option value="1">开启</option></select><font color="green">开启后商户可选择 USDT-TRC20 作为结算方式（人工结算，不做自动转账）</font></div>
+	</div><br/>
+	<div class="form-group">
 	  <label class="col-sm-3 control-label">商户满多少金额自动转账</label>
 	  <div class="col-sm-9"><input type="text" name="auto_settle_money" value="<?php echo $conf['auto_settle_money']; ?>" class="form-control" placeholder="留空为不自动转账"/><font color="green">如开启，需要先开启转账付款功能，填写后，计划任务将出现一个新的url，只支持支付宝结算方式</font></div>
 	</div><br/>

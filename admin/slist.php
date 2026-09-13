@@ -92,7 +92,7 @@ $(document).ready(function(){
 					}else if(value == '4'){
 						typename='<img src="/assets/icon/bank.ico" width="16" onerror="this.style.display=\'none\'">银行卡';
 					}else if(value == '5'){
-						typename='支付机构';
+						typename='USDT-TRC20';
 					}
 					if(row.auto!=1) typename+='<small>[手动]</small>'
 					return typename;
