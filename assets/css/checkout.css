@@ -804,3 +804,17 @@
 @media (prefers-color-scheme: dark) {
   .epay-h5-page .epay-transition__icon { background: rgba(37, 99, 235, .18); }
 }
+
+/* ---------- 27. JSAPI / OAuth / Captcha Extras（Phase 2-F3） ----------
+   JSAPI 桥接页、openid/cert 结果页、验证码前置页共用补充 */
+.epay-textarea-copy {
+  width: 100%; box-sizing: border-box; margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--epay-border); border-radius: 12px;
+  background: var(--epay-bg); color: var(--epay-text-1);
+  font-family: inherit; font-size: 14px; line-height: 1.6; text-align: center;
+  resize: none; overflow-wrap: anywhere;
+}
+.epay-wxopen-img { width: 150px; height: 150px; margin: 20px auto 0; display: block; }
+.epay-captcha-note { margin-top: 16px; text-align: center; font-size: 13px; line-height: 1.6; color: var(--epay-text-3); }
+.epay-jspay-spinner { margin: 18px auto 0; }

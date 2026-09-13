@@ -1,4 +1,5 @@
 <?php
+// 支付环境安全验证（极验滑动）
 if (!defined('IN_CRONLITE')) exit();
 
 $html = '<form id="dopay" action="'.$siteurl.'submit.php" method="post">';
@@ -8,34 +9,24 @@ foreach ($query_arr as $k=>$v) {
 $html .= '<input type="submit" value="Loading" style="display:none"></form>';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>支付环境安全验证</title>
-	<style type="text/css">
-body{font-family:"微软雅黑";height:auto!important;height:555px;min-height:555px;margin:0}
-.container{margin:0 auto;margin-top:100px;background:#fff;text-align:center}
-.header>p{margin:0;margin-top:24px;font-size:18px;line-height:1.7;color:#5d5d5d}
-strong{color:#3190e6}
-@media screen and (max-width:767px){.container{margin-top:10px}
-.header>p{margin:0;padding:20px;font-size:20px;line-height:1.7;color:#5d5d5d}
-}
-@media screen and (max-width:320px){.container{margin-top:0}
-.header>p{margin:0;padding:20px;font-size:18px;line-height:1.7;color:#5d5d5d}
-}
-	</style>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+<meta name="renderer" content="webkit" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>支付环境安全验证</title>
+<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
 </head>
-<body>
-<div class="container">
-    <div class="header">
-    <p>
-        很抱歉，当前支付人数过多，请完成<strong>“滑动验证”</strong>后继续支付
-    </p>
-    </div>
+<body class="epay-page">
+<div class="epay-card">  <div class="epay-status epay-status--warning">
+    <div class="epay-status__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
+    <h1 class="epay-status__title" id="waiting">支付环境安全验证</h1>
+    <p class="epay-status__desc">当前支付人数过多，请完成<strong>“滑动验证”</strong>后继续支付</p>
+  </div>
 </div>
 <?php echo $html?>
-<script src="<?php echo $cdnpublic?>jquery/1.12.4/jquery.min.js"></script>
+<script src="<?php echo $cdnpublic ?>jquery/1.12.4/jquery.min.js"></script>
 <script src="https://static.geetest.com/v4/gt4.js"></script>
 <script>
 window.appendChildOrg = Element.prototype.appendChild;
@@ -56,8 +47,8 @@ initGeetest4({
         captcha.showCaptcha();
     }).onSuccess(function(){
         var result = captcha.getValidate();
-        result.pid = '<?php echo $query_arr['pid']?>';
-        result.trade_no = '<?php echo $query_arr['out_trade_no']?>';
+        result.pid = <?php echo json_encode($query_arr['pid'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+        result.trade_no = <?php echo json_encode($query_arr['out_trade_no'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
         $.ajax({
             url: 'getshop.php?act=captcha_verify',
             type: 'post',

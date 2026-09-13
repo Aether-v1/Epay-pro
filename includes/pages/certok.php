@@ -1,41 +1,28 @@
 <?php
-/**
- * 实名认证成功页面
-**/
-if(!defined('IN_CRONLITE'))exit();
+// 实名认证成功页面
+if (!defined('IN_CRONLITE')) exit();
 ?>
-<html class="weui-msg">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>实名认证成功</title>
-    <link href="/assets/css/weui.min.css" rel="stylesheet">
-    <style>.page{position:absolute;top:0;right:0;bottom:0;left:0;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}</style>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+<meta name="renderer" content="webkit" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>实名认证成功</title>
+<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
 </head>
-<body>
-<div class="container">
-<div class="page">
-<div class="weui-msg">
-    <div class="weui-msg__icon-area">
-        <i class="weui-icon-success weui-icon_msg"></i>
+<body class="epay-page">
+<div class="epay-card">
+  <div class="epay-status epay-status--success">
+    <div class="epay-status__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h1 class="epay-status__title">实名认证成功</h1>
+    <p class="epay-status__desc">请返回浏览器查看结果</p>
+    <div class="epay-status__actions">
+      <a href="javascript:;" class="epay-btn epay-btn--primary epay-btn--block" id="Close">关闭</a>
     </div>
-    <div class="weui-msg__text-area">
-        <h2 class="weui-msg__title">实名认证成功</h2>
-        <p class="weui-msg__desc">请返回浏览器查看结果</p>
-    </div>
-    <div class="weui-msg__opr-area">
-        <p class="weui-btn-area">
-            <a href="javascript:;" class="weui-btn weui-btn_default" id="Close">关闭</a>
-        </p>
-    </div>
-    <div class="weui-msg__extra-area">
-        <div class="weui-footer"><p class="weui-footer__links"></p></div>
-    </div>
-</div>
-</div>
-</div>
-<script src="<?php echo $cdnpublic?>jquery/1.12.4/jquery.min.js"></script>
-<script>
+  </div>
+</div><script src="<?php echo $cdnpublic ?>jquery/1.12.4/jquery.min.js"></script><script>
 document.body.addEventListener('touchmove', function (event) {
 	event.preventDefault();
 },{ passive: false });

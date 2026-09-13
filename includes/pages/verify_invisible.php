@@ -1,4 +1,5 @@
 <?php
+// 支付安全验证（极验无感）
 if (!defined('IN_CRONLITE')) exit();
 
 $html = '<form id="dopay" action="'.$siteurl.'submit.php" method="post">';
@@ -8,20 +9,24 @@ foreach ($query_arr as $k=>$v) {
 $html .= '<input type="submit" value="Loading"></form>';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>正在进行支付安全验证，请稍候...</title>
-	<style type="text/css">
-body{margin:0;padding:0}
-#waiting{position:absolute;left:50%;top:50%;height:35px;margin:-35px 0 0 -160px;padding:20px;font:16px/30px "Helvetica Neue",Helvetica,Arial,sans-serif;background:#f9fafc url(/assets/img/loading.gif) no-repeat 20px 20px;text-indent:40px;border:1px solid #c5d0dc}
-	</style>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+<meta name="renderer" content="webkit" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>正在进行支付安全验证，请稍候...</title>
+<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
 </head>
-<body>
-<p id="waiting">正在进行支付安全验证，请稍候...</p>
+<body class="epay-page">
+<div class="epay-card">  <div class="epay-status epay-status--waiting">
+    <div class="epay-status__icon"><span class="epay-spinner epay-spinner--lg" aria-hidden="true"></span></div>
+    <h1 class="epay-status__title" id="waiting">正在进行支付安全验证，请稍候...</h1>
+    <p class="epay-status__desc">验证通过后将自动进入支付流程</p>
+  </div>
+</div>
 <?php echo $html?>
-<script src="<?php echo $cdnpublic?>jquery/1.12.4/jquery.min.js"></script>
+<script src="<?php echo $cdnpublic ?>jquery/1.12.4/jquery.min.js"></script>
 <script src="https://static.geetest.com/v4/gt4.js"></script>
 <script>
 window.appendChildOrg = Element.prototype.appendChild;
@@ -41,8 +46,8 @@ initGeetest4({
         captcha.showCaptcha();
     }).onSuccess(function(){
         var result = captcha.getValidate();
-        result.pid = '<?php echo $query_arr['pid']?>';
-        result.trade_no = '<?php echo $query_arr['out_trade_no']?>';
+        result.pid = <?php echo json_encode($query_arr['pid'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+        result.trade_no = <?php echo json_encode($query_arr['out_trade_no'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
         $.ajax({
             url: 'getshop.php?act=captcha_verify',
             type: 'post',
