@@ -781,3 +781,26 @@
 .epay-channel--jdpay .epay-channel-ico { background: #E1251B; }
 .epay-channel--bank .epay-channel-ico { background: #D9001B; }
 .epay-channel--douyinpay .epay-channel-ico { background: #161823; }
+
+/* ---------- 26. H5 / WAP Page Extras（Phase 2-F2） ----------
+   H5 scheme 页与 WAP 二维码页共用布局补充 */
+.epay-h5-actions { display: grid; gap: 12px; margin-top: 24px; }
+.epay-h5-hint { margin-top: 14px; text-align: center; font-size: 13px; line-height: 1.6; color: var(--epay-text-3); }
+.epay-h5-page .epay-transition__icon .epay-channel-ico {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.epay-h5-page .epay-transition__icon .epay-channel-ico svg { width: 24px; height: 24px; display: block; }
+.epay-qr-link {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 18px; padding: 12px 14px;
+  background: var(--epay-bg); border: 1px solid var(--epay-border);
+  border-radius: 12px;
+}
+.epay-qr-link__text { flex: 1; min-width: 0; font-size: 12px; line-height: 1.6; color: var(--epay-text-2); overflow-wrap: anywhere; }
+.epay-qr-link__text a { color: var(--epay-primary); word-break: break-all; }
+.epay-qr-link__copy { flex-shrink: 0; }
+.epay-qr-link__copy .epay-btn { min-height: 40px; padding: 0 16px; font-size: 14px; }
+@media (prefers-color-scheme: dark) {
+  .epay-h5-page .epay-transition__icon { background: rgba(37, 99, 235, .18); }
+}
