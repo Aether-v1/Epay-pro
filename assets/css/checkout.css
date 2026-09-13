@@ -774,3 +774,10 @@
 @media (prefers-reduced-motion: reduce) {
   .epay-status__meta .epay-dot { animation: none; }
 }
+
+/* ---------- 25. QR Channel Modifiers（Phase 2-F1） ----------
+   其余渠道二维码页共用同一 QR 组件，差异仅渠道图标底色 */
+.epay-channel--qqpay .epay-channel-ico { background: #12B7F5; }
+.epay-channel--jdpay .epay-channel-ico { background: #E1251B; }
+.epay-channel--bank .epay-channel-ico { background: #D9001B; }
+.epay-channel--douyinpay .epay-channel-ico { background: #161823; }
