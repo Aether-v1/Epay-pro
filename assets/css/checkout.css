@@ -758,3 +758,19 @@
 @media (prefers-reduced-motion: reduce) {
   .epay-qr__status .epay-dot { animation: none; }
 }
+
+/* ---------- 24. Status Page Extras（Phase 2-E） ----------
+   状态页共用增强：等待 spinner / 警告商品名 / 检测状态点 */
+.epay-status__icon .epay-spinner { width: 34px; height: 34px; border-width: 3px; }
+.epay-warn-name { font-weight: 600; color: var(--epay-warning); overflow-wrap: anywhere; }
+.epay-status__meta .epay-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--epay-warning);
+  display: inline-block; margin-right: 6px;
+  animation: epay-dot-pulse 1.6s ease-in-out infinite;
+}
+.epay-status__meta.is-paid { color: var(--epay-success); font-weight: 600; }
+.epay-status__meta.is-paid .epay-dot { background: var(--epay-success); animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .epay-status__meta .epay-dot { animation: none; }
+}

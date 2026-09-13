@@ -4,28 +4,21 @@
 if(!defined('IN_PLUGIN'))exit();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 	<title>支付结果</title>
-	<link href="/assets/pay/css/weui.css" rel="stylesheet" />
+	<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
 </head>
-<body>
-	<div class="container js_container">
-		<div class="page msg">
-			<div class="weui_msg">
-				<div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
-				<div class="weui_text_area">
-					<h2 class="weui_msg_title">支付成功</h2>
-					<p class="weui_msg_desc">支付成功，请回到浏览器查看订单</p>
-				</div>
-				<div class="weui_opr_area">
-					<p class="weui_btn_area">
-						<a href="javascript:;" class="weui_btn weui_btn_primary" id="Close">关闭</a>
-						<!--a href="javascript:;" class="weui_btn weui_btn_default">返回</a-->
-					</p>
-				</div>
+<body class="epay-page">
+	<div class="epay-card">
+		<div class="epay-status epay-status--success">
+			<div class="epay-status__icon" aria-hidden="true">✓</div>
+			<h1 class="epay-status__title">支付成功</h1>
+			<p class="epay-status__desc">支付成功，请回到浏览器查看订单</p>
+			<div class="epay-status__actions">
+				<a href="javascript:;" class="epay-btn epay-btn--primary" id="Close">关闭</a>
 			</div>
 		</div>
 	</div>
@@ -43,7 +36,7 @@ if(!defined('IN_PLUGIN'))exit();
 			}
 		}
 		Alipayready(function(){
-			$('.weui_opr_area #Close').click(function() {
+			$('#Close').click(function() {
 				AlipayJSBridge.call('popWindow');
 			});
 		})
@@ -59,15 +52,15 @@ if(!defined('IN_PLUGIN'))exit();
 			jsApiCall();
 		}
 		function jsApiCall() {
-			$('.weui_opr_area #Close').click(function() {
+			$('#Close').click(function() {
 				WeixinJSBridge.call('closeWindow');
 			});
 		}
 	}else{
-		$('.weui_opr_area #Close').click(function() {
+		$('#Close').click(function() {
 			window.opener=null;window.close();
 		});
 	}
 </script>
-	</body>
+</body>
 </html>
