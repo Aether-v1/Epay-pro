@@ -818,3 +818,81 @@
 .epay-wxopen-img { width: 150px; height: 150px; margin: 20px auto 0; display: block; }
 .epay-captcha-note { margin-top: 16px; text-align: center; font-size: 13px; line-height: 1.6; color: var(--epay-text-3); }
 .epay-jspay-spinner { margin: 18px auto 0; }
+/* ---------- 28. Paypage 码牌收款（Phase 2-G） ---------- */
+.epay-paypage { font-family: var(--epay-font); }
+.epay-paypage .layout-flex { background: var(--epay-bg); }
+.epay-paypage .content { padding: 18px 14px 8px; box-sizing: border-box; }
+.epay-paypage .paypage-card { background: var(--epay-surface); border: 1px solid var(--epay-border); border-radius: 20px; box-shadow: var(--epay-shadow); padding: 22px 20px 16px; margin-bottom: 14px; }
+.epay-paypage .paypage-merchant { display: flex; align-items: center; gap: 12px; padding-bottom: 16px; margin-bottom: 14px; border-bottom: 1px dashed var(--epay-border); }
+.epay-paypage .paypage-merchant .sico_pay { width: 46px; height: 46px; border-radius: 14px; background-size: 46px 46px; margin: 0; flex-shrink: 0; }
+.epay-paypage .selTitle { font-size: 17px; font-weight: 650; color: var(--epay-text-1); }
+.epay-paypage .payMoney { margin: 2px 0 8px; color: var(--epay-text-2); font-size: 13px; text-align: left; }
+.epay-paypage .set_amount { margin: 0; padding: 18px 16px; background: var(--epay-bg); border: 1px solid var(--epay-border); border-radius: 16px; box-shadow: none; }
+.epay-paypage .amount_bd { height: 56px; line-height: 56px; position: relative; }
+.epay-paypage .amount_bd .i_money { font-size: 30px; font-weight: 650; color: var(--epay-text-1); height: 56px; line-height: 56px; }
+.epay-paypage .amount_bd .input_simu { font-size: 42px; font-weight: 750; color: var(--epay-text-1); height: 56px; line-height: 56px; letter-spacing: -1px; }
+.epay-paypage .amount_bd .line_simu { margin-top: 6px; height: 44px; background: var(--epay-primary); }
+.epay-paypage #clearBtn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: rgba(15, 23, 42, .06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/16px 16px no-repeat; }
+.epay-paypage .set_remark { display: block; margin-top: 14px; padding: 0; }
+.epay-paypage .have_been_set { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: auto; margin: 0; padding: 13px 16px; background: var(--epay-bg); border: 1px solid var(--epay-border); border-radius: 14px; text-align: left; box-sizing: border-box; }
+.epay-paypage .have_been_set > span { font-size: 14px; color: var(--epay-text-2); }
+.epay-paypage .remark_operate { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.epay-paypage .remark_operate > a { font-size: 13px; color: var(--epay-primary); }
+.epay-paypage .remark_operate > a::after { display: none; }
+.epay-paypage .paypage-methods { margin-top: 12px; font-size: 13px; color: var(--epay-text-2); text-align: center; }
+.epay-paypage .paypage-trust { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 12px 0 4px; font-size: 12px; color: var(--epay-text-3); }
+.epay-paypage .keyboard { background: var(--epay-surface); border-radius: 22px 22px 0 0; box-shadow: 0 -10px 30px rgba(15, 23, 42, .06); overflow: hidden; }
+.epay-paypage .key_table td { height: 62px; color: var(--epay-text-1); }
+.epay-paypage .keyboard .key { line-height: 62px; font-size: 26px; font-weight: 600; }
+.epay-paypage .keyboard .key:active { background: #EDF1F7; }
+.epay-paypage .keyboard .pay_btn { background: var(--epay-primary); color: #fff; font-size: 18px; font-weight: 650; line-height: 1.4; }
+.epay-paypage .keyboard .pay_btn.disable, .epay-paypage .key_table td.disable { background: #DDE3EC; color: #94A3B8; }
+.epay-paypage .keyboard .pay_btn:active { background: #1D4ED8; }
+.epay-paypage .copyRight { font-size: 12px; color: var(--epay-text-3); padding: 6px 0 18px; }
+.epay-paypage .modal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; background: rgba(15, 23, 42, .45); }
+.epay-paypage .modal.show { display: flex; }
+.epay-paypage .modal-content { width: calc(100% - 48px); max-width: 340px; margin: 0; background: var(--epay-surface); border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(15, 23, 42, .25); }
+.epay-paypage .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 8px; }
+.epay-paypage .modal-header .title { font-size: 16px; font-weight: 650; color: var(--epay-text-1); }
+.epay-paypage .modal-header .close { font-size: 22px; color: var(--epay-text-3); cursor: pointer; line-height: 1; }
+.epay-paypage .modal-body { padding: 10px 18px 20px; }
+.epay-paypage .modal-body textarea { width: 100%; box-sizing: border-box; min-height: 72px; padding: 10px 12px; border: 1px solid var(--epay-border); border-radius: 10px; font-size: 14px; font-family: inherit; resize: none; background: var(--epay-bg); color: var(--epay-text-1); }
+.epay-paypage .modal-body button { width: 100%; margin-top: 12px; height: 48px; border-radius: 12px; background: var(--epay-primary); color: #fff; font-size: 16px; font-weight: 650; }
+.epay-paypage .remark-tip { margin-top: 6px; font-size: 12px; color: var(--epay-danger); display: none; }
+
+/* ---------- 29. Paypage 状态页 Toast / Dialog（Phase 2-G） ---------- */
+.epay-status-card { padding: 30px 22px 22px; text-align: center; }
+.epay-status-card .epay-amount { margin: 4px 0 18px; }
+.epay-status-card .epay-status__tip { margin-top: 14px; font-size: 13px; color: var(--epay-text-3); line-height: 1.6; }
+.epay-status-card .epay-error-msg { margin: 6px 0 16px; font-size: 14px; line-height: 1.8; color: var(--epay-text-2); overflow-wrap: anywhere; }
+.epay-status-card .epay-error-msg a { color: var(--epay-primary); text-decoration: none; display: inline-block; margin-top: 10px; font-weight: 600; }
+.epay-status-card .epay-footer { margin-top: 16px; font-size: 12px; color: var(--epay-text-3); }
+.epay-toast { display: none; position: fixed; inset: 0; z-index: 3000; }
+.epay-toast .epay-toast__box { position: absolute; left: 50%; top: 43%; transform: translate(-50%, -50%); min-width: 120px; max-width: 220px; background: rgba(17, 24, 39, .86); border-radius: 14px; padding: 22px 18px; text-align: center; }
+.epay-toast__spinner { width: 30px; height: 30px; margin: 0 auto 10px; border: 3px solid rgba(255, 255, 255, .25); border-top-color: #fff; border-radius: 50%; animation: epay-spin .8s linear infinite; }
+.epay-toast__text { font-size: 13px; color: rgba(255, 255, 255, .92); }
+@keyframes epay-spin { to { transform: rotate(360deg); } }
+.epay-dialog { display: none; position: fixed; inset: 0; z-index: 2000; }
+.epay-dialog .epay-dialog__mask { position: absolute; inset: 0; background: rgba(15, 23, 42, .5); }
+.epay-dialog .epay-dialog__box { position: absolute; left: 50%; top: 43%; transform: translate(-50%, -50%); width: calc(100% - 64px); max-width: 300px; background: var(--epay-surface); border-radius: 16px; padding: 22px 20px 0; overflow: hidden; }
+.epay-dialog__title { font-size: 16px; font-weight: 650; color: var(--epay-text-1); text-align: center; padding: 4px 0 10px; }
+.epay-dialog__bd { font-size: 14px; line-height: 1.7; color: var(--epay-text-2); text-align: center; padding-bottom: 18px; overflow-wrap: anywhere; }
+.epay-dialog__ft { display: flex; border-top: 1px solid var(--epay-border); margin: 0 -20px; }
+.epay-dialog__btn { flex: 1; height: 52px; line-height: 52px; text-align: center; font-size: 16px; color: var(--epay-primary); font-weight: 600; cursor: pointer; text-decoration: none; }
+.epay-dialog__btn:active { background: var(--epay-bg); }
+@media (prefers-reduced-motion: reduce) { .epay-toast__spinner { animation-duration: 1.4s; } }
+
+/* ---------- 30. 特殊页（Phase 2-G） ---------- */
+.epay-jump-page { background: var(--epay-bg); font-family: var(--epay-font); min-height: 100vh; }
+.epay-jump-page .epay-jump-card { max-width: 380px; margin: 0 auto; padding: 64px 20px 32px; }
+.epay-jump-page .epay-jump-box { background: var(--epay-surface); border: 1px solid var(--epay-border); border-radius: 22px; padding: 34px 24px; box-shadow: var(--epay-shadow); text-align: center; }
+.epay-jump-page .epay-jump-icon { width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 20px; background: rgba(37, 99, 235, .1); color: var(--epay-primary); display: flex; align-items: center; justify-content: center; }
+.epay-jump-page .epay-jump-title { font-size: 20px; font-weight: 700; color: var(--epay-text-1); }
+.epay-jump-page .epay-jump-desc { margin-top: 10px; font-size: 14px; line-height: 1.8; color: var(--epay-text-2); }
+.epay-jump-page .epay-jump-desc b { color: var(--epay-primary); font-weight: 650; }
+.epay-jump-page .epay-jump-btn { display: block; margin: 26px auto 0; width: 100%; max-width: 260px; height: 50px; line-height: 50px; border-radius: 25px; border: 1.5px solid var(--epay-primary); color: var(--epay-primary); font-size: 16px; font-weight: 600; text-align: center; text-decoration: none; box-sizing: border-box; }
+.epay-jump-page .epay-jump-btn:active { background: var(--epay-primary); color: #fff; }
+.epay-qrpc-page { background: var(--epay-bg); font-family: var(--epay-font); min-height: 100vh; padding: 28px 16px; box-sizing: border-box; }
+.epay-qrpc-page .epay-card { max-width: 480px; margin: 0 auto; }
+.epay-qrpc-page .epay-qr__box--pc { width: 240px; height: 240px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.epay-qrpc-page .epay-qr__box--pc iframe { width: 230px; height: 230px; border: 0; display: block; }
