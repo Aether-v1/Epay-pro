@@ -1,0 +1,61 @@
+# ============================================================
+# Epay 生产环境 Apache 安全配置
+# Batch E2: 生产基础设施安全加固
+# ============================================================
+
+# 禁止目录列表
+Options -Indexes
+
+# 禁止访问敏感文件
+<FilesMatch "\.(env|sql|sql\.gz|dump|bak|old|orig|log|ini|sh)$">
+    Require all denied
+</FilesMatch>
+
+# 禁止访问配置文件
+<FilesMatch "^(config|config\.inc)\.php$">
+    Require all denied
+</FilesMatch>
+
+# 禁止访问 .git 目录
+<DirectoryMatch "\.git">
+    Require all denied
+</DirectoryMatch>
+
+# 禁止访问安装目录
+<DirectoryMatch "install">
+    Require all denied
+</DirectoryMatch>
+
+# 禁止访问日志目录
+<DirectoryMatch "logs">
+    Require all denied
+</DirectoryMatch>
+
+# 禁止访问测试目录
+<DirectoryMatch "tests">
+    Require all denied
+</DirectoryMatch>
+
+# 上传目录禁止执行 PHP
+<DirectoryMatch "assets/files">
+    <FilesMatch "\.(php|php5|php7|phtml|phar|pht|phps|cgi|pl|py|sh)$">
+        Require all denied
+    </FilesMatch>
+</DirectoryMatch>
+
+# 安全响应头
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 关闭 PHP 版本暴露
+<IfModule mod_php.c>
+    php_flag expose_php Off
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+    php_value session.cookie_httponly On
+    php_value session.cookie_samesite "Lax"
+</IfModule>

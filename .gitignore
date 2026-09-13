@@ -1,0 +1,18 @@
+# ===== Epay 工作副本 .gitignore（Phase 2 基线） =====
+# 目的：阻止生产密钥、数据库密码、日志、敏感配置进入版本控制
+
+# 数据库配置（含 DB 密码字段，不得入库）
+config.php
+
+# 日志目录（运行时可能产生敏感信息）
+logs/
+*.log
+
+# 安装锁与临时文件
+install/install.lock
+*.tmp
+*.swp
+
+# 系统文件
+.DS_Store
+Thumbs.db

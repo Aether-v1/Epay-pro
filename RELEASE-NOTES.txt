@@ -1,0 +1,150 @@
+============================================================
+Epay 彩虹易支付 - 安全加固版
+============================================================
+
+版本：security/batch-a-rebuild
+代码基线：1cabd48
+官方基线：a4d0f0421cfcbc573913c8007bde3d0c04a5713a
+发布日期：2026-09-13
+
+============================================================
+已完成的安全修复
+============================================================
+
+【Batch A - 核心安全】
+A1 管理员认证安全
+  - 删除 admin/123456 默认账号
+  - 强制设置强密码
+  - password_hash() / password_verify()
+  - 旧密码自动迁移
+  - 修改密码后旧 Session 失效
+  - 登录成功轮换 Session ID
+
+A2 商户登录安全
+  - 服务端 CSRF Token
+  - Session 随机 Token
+  - hash_equals() 恒定时间比较
+  - IP/账号/IP+账号三维限流
+  - 不信任伪造 X-Forwarded-For
+  - 统一登录失败提示
+
+A3 SQL 注入修复
+  - 所有查询 PDO 预处理+参数绑定
+  - ORDER BY/排序方向白名单
+  - LIKE 查询绑定参数
+  - 分页参数严格转整数
+  - 禁止 addslashes() 作为主要防护
+
+A4 退款资金安全
+  - 五态状态机：CREATED/PROCESSING/SUCCESS/REJECTED/UNKNOWN
+  - 三阶段事务：Reserve → External → Finalize
+  - 资金冻结模型
+  - 数据库唯一约束 UNIQUE(trade_no, out_refund_no)
+  - UNKNOWN 人工对账后台
+  - 三通道动态 Mock 测试
+
+A5 存储型 XSS
+  - 输入长度和字符集验证
+  - 所有不可信数据输出上下文编码
+  - CSV/Excel 公式注入防护
+  - 覆盖后台/商户/搜索/日志/导出
+
+【Batch B - Web/API 安全】
+- AJAX CSRF 全覆盖
+- admin/*.php 表单 CSRF
+- 支付通道 appurl SSRF 防护
+- Callback 签名及重放防护
+- 文件上传安全
+- display_errors 关闭
+- 敏感信息泄露治理
+- 商户资源隔离（IDOR）
+
+【Batch C - RBAC + 审计】
+- 管理员角色权限系统（5张表）
+- pre_admins / pre_roles / pre_permissions
+- pre_admin_roles / pre_role_permissions
+- get_current_admin_id() / has_permission() / require_permission()
+- admin_audit_log() 审计日志
+- 高风险操作审计日志
+
+【Batch D - Admin 权限覆盖】
+- 50+ admin endpoint 权限检查
+- 负数金额校验
+- 管理员接口认证+CSRF+权限+审计
+
+【Batch E2 - 生产基础设施】
+- Nginx 生产配置模板
+- Apache .htaccess 安全配置
+- 生产部署文档
+- 安全检查脚本
+
+【Batch E3-A - 支付插件+转账安全】
+- 63个支付插件深度审计
+- 转账/代付资金安全重写
+- 六态状态机：CREATED/PROCESSING/SUCCESS/REJECTED/UNKNOWN/CANCELLED
+- 三阶段 Reserve-External-Finalize 模型
+- 资金冻结函数 freezeUserMoney/unfreezeUserMoney/settleFrozenUserMoney
+- UNIQUE(uid, out_biz_no) 幂等约束
+- 真实多进程并发测试（54项）
+- 9个 Failpoint 崩溃恢复测试
+- 三通道动态 Mock 测试
+- UNKNOWN 人工对账后台
+
+============================================================
+新版安装向导特性
+============================================================
+
+1. Web 页面配置数据库 + 设置管理员账号密码
+2. 密码强度验证（至少8位，大小写字母+数字）
+3. password_hash() 加密存储
+4. 自动执行 Batch A / RBAC / Transfer Safety 迁移
+5. 幂等迁移（重复执行不报错）
+6. 安装完成页面不显示默认密码
+
+============================================================
+自动化测试统计
+============================================================
+
+总计：432 项测试通过
+- 动态测试：411 项
+- 静态检查：21 项
+
+包括：
+- Batch A：56 项
+- Batch B 第一阶段：46 项
+- Batch B 第二阶段：37 项
+- Batch C 第一阶段：17 项
+- Batch C 第二阶段：57 项
+- Batch D：45 项
+- 退款并发：15 项
+- 退款崩溃恢复：21 项
+- 退款通道 Mock：45 项
+- 转账安全：42 项
+- 转账并发：54 项
+
+============================================================
+部署说明
+============================================================
+
+1. 上传本压缩包到服务器网站目录
+2. 解压
+3. 设置目录权限（所有者 www，目录 755，文件 644）
+4. 访问 https://你的域名/install/
+5. 按照安装向导填写数据库和管理员信息
+6. 安装完成后删除 install/ 目录
+7. 参考 docs/BAOTA-DEPLOYMENT.md 进行生产安全配置
+
+详细部署教程见：docs/BAOTA-DEPLOYMENT.md
+
+============================================================
+生产环境注意事项
+============================================================
+
+- 本版本仍处于安全加固阶段，Production Gate = NOT ALLOWED
+- 建议先在测试环境充分验证
+- 转账/代付功能：16个插件中，dinpay/zhangyishou 无查询接口，建议禁用直至人工对账流程建立
+- 生产部署前请完整阅读 docs/BAOTA-DEPLOYMENT.md
+- 定期备份数据库和代码
+- 监控异常支付和退款
+
+============================================================
