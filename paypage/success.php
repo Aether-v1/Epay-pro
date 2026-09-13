@@ -10,51 +10,34 @@ if(!isset($_SESSION['paypage_trade_no']) || $_SESSION['paypage_trade_no']!=$trad
 $userrow=$DB->getRow("select codename,username from pre_user where uid='{$row['uid']}' limit 1");
 $codename = !empty($userrow['codename'])?$userrow['codename']:$userrow['username'];
 ?>
-<html class="weui-msg">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>支付成功页面</title>
-    <link href="/assets/css/weui.min.css" rel="stylesheet">
-    <style>.page{position:absolute;top:0;right:0;bottom:0;left:0;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}</style>
+    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
 </head>
-<body>
-<div class="container">
-<div class="page">
-<div class="weui-msg">
-    <div class="weui-msg__icon-area">
-        <i class="weui-icon-success weui-icon_msg"></i>
+<body class="epay-page">
+<div class="epay-card epay-status-card">
+    <div class="epay-status epay-status--success">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+        <h1>支付成功</h1>
+        <p>付款已完成</p>
     </div>
-    <div class="weui-msg__text-area">
-        <h2 class="weui-msg__title">支付成功</h2>
-		<h2 class="weui-msg__title"><span style="font-size:38px;font-weight:700;color:#f40;">¥<?php echo $row['money']?></span></h2>
-		<div class="weui-msg__custom-area">
-			<div class="weui-cells">
-			  <div class="weui-cell weui-cell_example">
-				<span class="weui-cell__bd">收款方</span>
-				<span class="weui-cell__ft"><strong><?php echo $codename?></strong></span>
-			  </div>
-			  <div class="weui-cell weui-cell_example">
-				<span class="weui-cell__bd">完成时间</span>
-				<span class="weui-cell__ft"><?php echo $row['endtime']?></span>
-			  </div>
-			  <div class="weui-cell weui-cell_example">
-				<span class="weui-cell__bd">订单号</span>
-				<span class="weui-cell__ft"><?php echo $trade_no?></span>
-			  </div>
-			</div>
-		</div>
+    <div class="epay-amount">
+        <span class="epay-amount__currency">¥</span><span class="epay-amount__value"><?php echo htmlspecialchars($row['money'], ENT_QUOTES, 'UTF-8'); ?></span>
     </div>
-    <div class="weui-msg__opr-area">
-        <p class="weui-btn-area">
-            <a href="javascript:;" class="weui-btn weui-btn_default" id="Close">关闭</a>
-        </p>
+    <div class="epay-order-meta">
+        <div class="epay-order-meta__row"><span class="epay-order-meta__label">收款方</span><span class="epay-order-meta__value"><strong><?php echo htmlspecialchars($codename, ENT_QUOTES, 'UTF-8'); ?></strong></span></div>
+        <div class="epay-order-meta__row"><span class="epay-order-meta__label">完成时间</span><span class="epay-order-meta__value"><?php echo htmlspecialchars($row['endtime'], ENT_QUOTES, 'UTF-8'); ?></span></div>
+        <div class="epay-order-meta__row"><span class="epay-order-meta__label">订单号</span><span class="epay-order-meta__value"><?php echo htmlspecialchars($trade_no, ENT_QUOTES, 'UTF-8'); ?></span></div>
     </div>
-    <div class="weui-msg__extra-area">
-        <div class="weui-footer"><p class="weui-footer__links"></p><p class="weui-footer__text">Copyright © <?php echo date("Y")?> <?php echo $conf['sitename']?></p></div>
+    <a href="javascript:;" class="epay-btn epay-btn--primary epay-btn--block" id="Close">关闭</a>
+    <div class="epay-trust">
+        <span class="epay-trust__item epay-trust__item--lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>安全支付</span>
     </div>
-</div>
-</div>
+    <div class="epay-footer">Copyright © <?php echo date("Y")?> <?php echo htmlspecialchars($conf['sitename'], ENT_QUOTES, 'UTF-8'); ?></div>
 </div>
 <script src="<?php echo $cdnpublic?>jquery/1.12.4/jquery.min.js"></script>
 <script src="//open.mobile.qq.com/sdk/qqapi.js?_bid=152"></script>

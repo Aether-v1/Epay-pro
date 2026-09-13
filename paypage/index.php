@@ -151,7 +151,7 @@ $codename = !empty($userrow['codename'])?$userrow['codename']:$userrow['username
 $csrf_token = md5(mt_rand(0,999).time());
 $_SESSION['paypage_token'] = $csrf_token;
 ?>
-<html lang="zh-cn">
+<html lang="zh-cn" class="epay-page epay-paypage">
 <head>
     <title>向商户付款</title>
     <meta charset="UTF-8">
@@ -162,22 +162,21 @@ $_SESSION['paypage_token'] = $csrf_token;
     <meta http-equiv="expires" content="0">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/style.css?version=1001">
+    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
 </head>
-<body>
+<body class="epay-page epay-paypage">
 <div class="layout-flex wrap">
 
   <!-- content start -->
   <div class="content">
-      <div class="mar20">
-          <table>
-              <tbody>
-                  <tr>
-                      <td><span class="sico_pay" style="margin:5px 5px 10px 5px"></span></td>
-                      <td  class="selTitle"><?php echo $codename?></td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
+      <div class="paypage-card">
+          <div class="paypage-merchant">
+              <span class="sico_pay"></span>
+              <div>
+                  <div class="selTitle"><?php echo htmlspecialchars($codename, ENT_QUOTES, 'UTF-8'); ?></div>
+                  <div class="paypage-hint">安全收款</div>
+              </div>
+          </div>
     <form name="payForm" action="dopay" method="post">
         <input type="hidden" name="uid" id="uid" value="<?php echo $uid?>">
         <input type="hidden" name="token" id="token" value="<?php echo $csrf_token?>">
@@ -187,10 +186,10 @@ $_SESSION['paypage_token'] = $csrf_token;
 		<input type="hidden" name="trade_no" id="trade_no" value="">
         <?php if($money){?><input type="hidden" name="txAmount" id="txAmount" value="<?php echo $money?>"><?php }?>
         <div class="set_amount">
-        	<div class="payMoney marLeft10">请输入付款金额</div>
+        	<div class="payMoney">请输入付款金额</div>
             <div class="amount_bd">
-                <i class="i_money marLeft10" style="">¥</i>
-                <span class="input_simu " id="amount"></span>
+                <i class="i_money">¥</i>
+                <span class="input_simu" id="amount"></span>
 
                 <!-- 模拟input -->
                 <em class="line_simu" id="line"></em>
@@ -210,6 +209,9 @@ $_SESSION['paypage_token'] = $csrf_token;
             </div>
         </div>
     </form>
+    <?php $paytypeMap = ['wxpay'=>'微信支付','alipay'=>'支付宝','qqpay'=>'QQ支付','bank'=>'银行卡/银联']; $paytypeShow = isset($paytypeMap[$type]) ? $paytypeMap[$type] : ''; ?>
+    <?php if($paytypeShow){ ?><div class="paypage-methods">支付方式：<?php echo htmlspecialchars($paytypeShow, ENT_QUOTES, 'UTF-8'); ?></div><?php } ?>
+    <div class="paypage-trust"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>安全支付 · 订单信息已加密传输</div>
     <div id="myModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -223,10 +225,11 @@ $_SESSION['paypage_token'] = $csrf_token;
             </div>
         </div>
     </div>
+      </div>
   </div>
   <!-- content end -->
 
-  <div class="copyRight">由 <span style="font-weight:bold"><?php echo $conf['sitename']?></span> 提供服务支持</div>
+  <div class="copyRight">由 <span style="font-weight:bold"><?php echo htmlspecialchars($conf['sitename'], ENT_QUOTES, 'UTF-8'); ?></span> 提供服务支持</div>
   <!-- 键盘 -->
   <div class="keyboard">
       <table class="key_table" id="keyboard" style="touch-action:pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
