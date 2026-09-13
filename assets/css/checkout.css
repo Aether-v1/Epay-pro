@@ -1,0 +1,643 @@
+/* ==========================================================================
+   Epay Modern Checkout Design System
+   现代支付收银台设计系统（Phase 2-A）
+   --------------------------------------------------------------------------
+   范围：cashier.php / includes/pages/* / paypage/* 的 View 层
+   命名空间：全部类名以 epay- 为前缀，避免污染后台 / user / 全局样式
+   原则：现代 SaaS 收银台风格，低饱和、大量留白、卡片式、无夸张动画
+   ========================================================================== */
+
+/* ---------- 1. Design Tokens ---------- */
+:root {
+  --epay-primary: #2563EB;
+  --epay-primary-soft: #EFF4FF;
+  --epay-primary-hover: #1D4ED8;
+  --epay-bg: #F6F8FB;
+  --epay-surface: #FFFFFF;
+  --epay-text: #0F172A;
+  --epay-text-2: #475569;
+  --epay-text-3: #64748B;
+  --epay-border: #E2E8F0;
+  --epay-border-strong: #CBD5E1;
+  --epay-success: #16A34A;
+  --epay-success-soft: #ECFDF3;
+  --epay-warning: #F59E0B;
+  --epay-warning-soft: #FFF8EB;
+  --epay-danger: #DC2626;
+  --epay-danger-soft: #FEF2F2;
+  --epay-radius-lg: 20px;
+  --epay-radius-md: 14px;
+  --epay-radius-sm: 10px;
+  --epay-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px rgba(15, 23, 42, .06);
+  --epay-shadow-sm: 0 1px 2px rgba(15, 23, 42, .05);
+  --epay-font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --epay-ease: 180ms ease;
+}
+
+/* ---------- 2. Page Shell ---------- */
+.epay-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 40px 16px 48px;
+  background: var(--epay-bg);
+  font-family: var(--epay-font);
+  color: var(--epay-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+/* 极淡科技背景装饰：网格 + 径向光晕（低透明度，不影响可读性） */
+.epay-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(560px 360px at 12% -4%, rgba(37, 99, 235, .06), transparent 70%),
+    radial-gradient(640px 420px at 100% 4%, rgba(16, 185, 129, .045), transparent 70%),
+    linear-gradient(rgba(15, 23, 42, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .025) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+  z-index: 0;
+}
+.epay-page > * { position: relative; z-index: 1; }
+
+/* ---------- 3. Checkout Card ---------- */
+.epay-card {
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  background: var(--epay-surface);
+  border: 1px solid var(--epay-border);
+  border-radius: var(--epay-radius-lg);
+  box-shadow: var(--epay-shadow);
+  padding: 36px 40px 32px;
+}
+
+/* ---------- 4. Header ---------- */
+.epay-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+.epay-head__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--epay-text);
+}
+.epay-head__logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  object-fit: contain;
+  display: block;
+}
+.epay-head__secure {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--epay-text-3);
+  background: var(--epay-bg);
+  border: 1px solid var(--epay-border);
+  padding: 5px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.epay-head__secure svg { width: 12px; height: 12px; color: var(--epay-success); }
+
+/* ---------- 5. Order Summary ---------- */
+.epay-summary { text-align: center; margin-bottom: 26px; }
+.epay-summary__name {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--epay-text);
+  margin: 0 0 6px;
+  line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+.epay-summary__merchant {
+  font-size: 13px;
+  color: var(--epay-text-3);
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+/* ---------- 6. Amount ---------- */
+.epay-amount {
+  text-align: center;
+  margin: 6px 0 10px;
+  color: var(--epay-text);
+  line-height: 1.1;
+}
+.epay-amount__currency {
+  font-size: 26px;
+  font-weight: 600;
+  vertical-align: top;
+  margin-right: 2px;
+  color: var(--epay-text);
+}
+.epay-amount__value {
+  font-size: 50px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 7. Order Meta ---------- */
+.epay-order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--epay-bg);
+  border: 1px solid var(--epay-border);
+  border-radius: var(--epay-radius-md);
+  margin-bottom: 24px;
+}
+.epay-order-meta__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+}
+.epay-order-meta__label { color: var(--epay-text-3); flex-shrink: 0; }
+.epay-order-meta__value {
+  color: var(--epay-text-2);
+  text-align: right;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+.epay-order-meta__value b { font-weight: 600; color: var(--epay-text); }
+.epay-order-meta__value .epay-fee { color: var(--epay-warning); font-weight: 600; }
+
+/* ---------- 8. Section ---------- */
+.epay-section { margin-top: 26px; }
+.epay-section__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--epay-text);
+  margin: 0 0 14px;
+}
+.epay-divider {
+  border: 0;
+  border-top: 1px solid var(--epay-border);
+  margin: 24px 0;
+}
+
+/* ---------- 9. Payment Methods Grid ---------- */
+.epay-methods {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.epay-method {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 14px;
+  background: var(--epay-surface);
+  border: 1.5px solid var(--epay-border);
+  border-radius: var(--epay-radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--epay-text);
+  text-align: left;
+  transition: border-color var(--epay-ease), box-shadow var(--epay-ease), background var(--epay-ease), transform var(--epay-ease);
+}
+.epay-method:hover {
+  border-color: var(--epay-border-strong);
+  box-shadow: var(--epay-shadow-sm);
+}
+.epay-method:focus-visible {
+  outline: 2px solid var(--epay-primary);
+  outline-offset: 2px;
+}
+.epay-method.is-active {
+  border-color: var(--epay-primary);
+  background: var(--epay-primary-soft);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+}
+.epay-method__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.epay-method__icon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+}
+/* 品牌色仅做图标底色局部强调 */
+.epay-method__icon--wechat { background: #E9F9F1; }
+.epay-method__icon--alipay { background: #E8F2FF; }
+.epay-method__icon--qq { background: #EAF1FF; }
+.epay-method__icon--bank { background: #FDF0EE; }
+.epay-method__icon--usdt { background: #E8F9F6; }
+.epay-method__icon--default { background: var(--epay-bg); }
+.epay-method__body { flex: 1; min-width: 0; }
+.epay-method__name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--epay-text);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.epay-method__badge {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--epay-primary);
+  background: var(--epay-primary-soft);
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.epay-method__radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--epay-border-strong);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--epay-ease), background var(--epay-ease);
+}
+.epay-method.is-active .epay-method__radio {
+  border-color: var(--epay-primary);
+  background: var(--epay-primary);
+}
+.epay-method.is-active .epay-method__radio::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* ---------- 10. Buttons ---------- */
+.epay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: var(--epay-radius-md);
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--epay-ease), box-shadow var(--epay-ease), border-color var(--epay-ease);
+  text-decoration: none;
+  user-select: none;
+}
+.epay-btn:focus-visible {
+  outline: 2px solid var(--epay-primary);
+  outline-offset: 2px;
+}
+.epay-btn--block { width: 100%; }
+.epay-btn--primary {
+  background: var(--epay-primary);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .24);
+}
+.epay-btn--primary:hover { background: var(--epay-primary-hover); }
+.epay-btn--primary:active { transform: translateY(1px); }
+.epay-btn--primary:disabled { opacity: .6; cursor: not-allowed; box-shadow: none; }
+.epay-btn--ghost {
+  background: var(--epay-surface);
+  color: var(--epay-text-2);
+  border-color: var(--epay-border-strong);
+}
+.epay-btn--ghost:hover { border-color: var(--epay-primary); color: var(--epay-primary); }
+.epay-btn .epay-spinner { border-color: rgba(255, 255, 255, .35); border-top-color: #fff; }
+
+/* ---------- 11. Trust Bar ---------- */
+.epay-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 22px;
+  font-size: 12px;
+  color: var(--epay-text-3);
+}
+.epay-trust__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.epay-trust__item svg { width: 13px; height: 13px; }
+.epay-trust__item--lock svg { color: var(--epay-success); }
+.epay-trust__item--shield svg { color: var(--epay-primary); }
+
+/* ---------- 12. QR Component ---------- */
+.epay-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 2px;
+}
+.epay-qr__hint {
+  font-size: 14px;
+  color: var(--epay-text-2);
+  margin: 0 0 4px;
+}
+.epay-qr__box {
+  width: 240px;
+  height: 240px;
+  padding: 12px;
+  box-sizing: border-box;
+  background: #fff; /* 二维码恒为白色底板，保证扫码可靠（含深色模式） */
+  border: 1px solid var(--epay-border);
+  border-radius: var(--epay-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.epay-qr__box img, .epay-qr__box canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain;
+  border-radius: 6px; /* 不裁剪二维码本体 */
+}
+.epay-qr__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--epay-text-3);
+}
+.epay-qr__status .epay-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--epay-warning); }
+.epay-qr__status.is-paid { color: var(--epay-success); font-weight: 600; }
+.epay-qr__status.is-paid .epay-dot { background: var(--epay-success); }
+.epay-qr__actions { display: flex; gap: 10px; margin-top: 16px; }
+
+/* ---------- 13. Spinner ---------- */
+.epay-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--epay-border);
+  border-top-color: var(--epay-primary);
+  display: inline-block;
+  animation: epay-spin .8s linear infinite;
+}
+@keyframes epay-spin { to { transform: rotate(360deg); } }
+
+/* ---------- 14. Status Components ---------- */
+.epay-status {
+  text-align: center;
+  padding: 16px 8px;
+  animation: epay-fade-in 220ms ease;
+}
+.epay-status__icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: #fff;
+}
+.epay-status--success .epay-status__icon { background: var(--epay-success); }
+.epay-status--error .epay-status__icon { background: var(--epay-danger); }
+.epay-status--warning .epay-status__icon { background: var(--epay-warning); }
+.epay-status--waiting .epay-status__icon { background: var(--epay-primary); }
+.epay-status__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--epay-text);
+  margin: 0 0 8px;
+}
+.epay-status__desc {
+  font-size: 14px;
+  color: var(--epay-text-3);
+  margin: 0 0 6px;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+.epay-status__amount {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--epay-text);
+  margin: 10px 0 4px;
+  letter-spacing: -0.5px;
+}
+.epay-status__meta {
+  font-size: 13px;
+  color: var(--epay-text-3);
+  margin-bottom: 22px;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+.epay-status__actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+@keyframes epay-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- 15. Transition (跳转中间页) ---------- */
+.epay-transition {
+  text-align: center;
+  padding: 12px 8px;
+}
+.epay-transition__icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--epay-primary-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.epay-transition__title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--epay-text);
+  margin: 0 0 6px;
+}
+.epay-transition__desc {
+  font-size: 14px;
+  color: var(--epay-text-3);
+  margin: 0 0 20px;
+}
+.epay-transition__amount { font-size: 28px; font-weight: 700; color: var(--epay-text); margin-bottom: 20px; }
+
+/* ---------- 16. Countdown ---------- */
+.epay-countdown {
+  font-size: 13px;
+  color: var(--epay-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.epay-countdown b { color: var(--epay-warning); font-weight: 600; }
+
+/* ---------- 17. Alert ---------- */
+.epay-alert {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--epay-radius-sm);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 14px 0;
+}
+.epay-alert--warning {
+  background: var(--epay-warning-soft);
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+.epay-alert--danger {
+  background: var(--epay-danger-soft);
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+.epay-alert--info {
+  background: var(--epay-primary-soft);
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+
+/* ---------- 18. Link button ---------- */
+.epay-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--epay-primary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background var(--epay-ease);
+}
+.epay-link-btn:hover { background: var(--epay-primary-soft); }
+.epay-link-btn:focus-visible { outline: 2px solid var(--epay-primary); outline-offset: 2px; }
+
+/* ---------- 19. Responsive ---------- */
+@media (max-width: 640px) {
+  .epay-page { padding: 0 0 32px; }
+  .epay-card {
+    max-width: 100%;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    box-shadow: none;
+    padding: 28px 20px 26px;
+  }
+  .epay-amount__value { font-size: 44px; }
+  .epay-methods { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .epay-method { min-height: 52px; padding: 10px 12px; }
+  .epay-method__icon { width: 30px; height: 30px; }
+  .epay-method__icon img { width: 20px; height: 20px; }
+  .epay-btn { min-height: 50px; }
+  .epay-qr__box { width: 216px; height: 216px; }
+}
+@media (max-width: 380px) {
+  .epay-methods { grid-template-columns: 1fr; } /* 360~380px 单列，保证点按区域 */
+  .epay-amount__value { font-size: 40px; }
+}
+@media (min-width: 1440px) {
+  .epay-card { max-width: 620px; } /* 大屏不无限拉伸，保持居中 */
+}
+
+/* ---------- 20. Dark Mode ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --epay-primary: #3B82F6;
+    --epay-primary-soft: rgba(59, 130, 246, .14);
+    --epay-primary-hover: #60A5FA;
+    --epay-bg: #0B0F17;
+    --epay-surface: #111827;
+    --epay-text: #F1F5F9;
+    --epay-text-2: #CBD5E1;
+    --epay-text-3: #94A3B8;
+    --epay-border: #1E293B;
+    --epay-border-strong: #334155;
+    --epay-success: #22C55E;
+    --epay-success-soft: rgba(34, 197, 94, .12);
+    --epay-warning: #FBBF24;
+    --epay-warning-soft: rgba(251, 191, 36, .12);
+    --epay-danger: #F87171;
+    --epay-danger-soft: rgba(248, 113, 113, .12);
+    --epay-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .35);
+  }
+  .epay-page::before {
+    background:
+      radial-gradient(560px 360px at 12% -4%, rgba(59, 130, 246, .08), transparent 70%),
+      radial-gradient(640px 420px at 100% 4%, rgba(16, 185, 129, .05), transparent 70%);
+    background-size: auto;
+  }
+  /* 二维码区域强制白色底板，扫码可靠性优先 */
+  .epay-qr__box { background: #fff; border-color: #334155; }
+  .epay-method__icon--wechat { background: rgba(7, 193, 96, .16); }
+  .epay-method__icon--alipay { background: rgba(22, 119, 255, .16); }
+  .epay-method__icon--qq { background: rgba(37, 99, 235, .18); }
+  .epay-method__icon--bank { background: rgba(220, 38, 38, .16); }
+  .epay-method__icon--usdt { background: rgba(16, 185, 129, .16); }
+}
+
+/* ---------- 21. Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .epay-spinner { animation: none; }
+}
+
+/* ---------- 22. Legacy-scope guard ----------
+   仅修饰 .epay-* 内部元素，避免污染全局 input/button/table */
+.epay-card input, .epay-card button, .epay-card select,
+.epay-status input, .epay-status button,
+.epay-transition input, .epay-transition button { font-family: inherit; }
