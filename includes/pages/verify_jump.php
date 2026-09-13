@@ -5,7 +5,9 @@ $x = new \lib\hieroglyphy();
 $key_enc = $x->hieroglyphyString($key);
 $html = '<form id="dopay" action="'.$siteurl.'submit.php" method="post">';
 foreach ($query_arr as $k=>$v) {
-    $html.= '<input type="hidden" name="'.$k.'" value="'.$v.'"/>';
+    $nameEsc = htmlspecialchars((string)$k, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $valueEsc = htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $html.= '<input type="hidden" name="'.$nameEsc.'" value="'.$valueEsc.'"/>';
 }
 $html .= '<input type="submit" value="Loading"></form>';
 ?>
