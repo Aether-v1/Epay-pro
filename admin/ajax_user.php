@@ -46,7 +46,7 @@ case 'userList':
 	$offset = intval($_POST['offset']);
 	$limit = intval($_POST['limit']);
 	$total = $DB->getColumn("SELECT count(*) from pre_user WHERE{$sql}");
-	$list = $DB->getAll("SELECT uid,account,username,email,phone,qq,url,key,money,frozen_money,gid,status,pay,settle,cert,certname,certno,addtime,endtime,domain,ip,lasttime,lastip,publickey,settle_id,auto,level FROM pre_user WHERE{$sql} order by {$order} limit $offset,$limit");
+	$list = $DB->getAll("SELECT uid,account,username,email,phone,qq,url,`key`,money,frozen_money,gid,status,pay,settle,cert,certname,certno,addtime,endtime,lasttime,publickey,settle_id,level FROM pre_user WHERE{$sql} order by {$order} limit $offset,$limit");
 	$list2 = [];
 	foreach($list as $row){
 		if($row['endtime']!=null && strtotime($row['endtime'])<time()){
