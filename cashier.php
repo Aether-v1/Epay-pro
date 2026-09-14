@@ -25,13 +25,11 @@ if(checkwechat()){
 	}
 }
 
-// ---- View 层输出转义（HTML Context Escape），仅用于本页展示，不改变任何业务数据 ----
 if(!function_exists('epay_esc')){
 	function epay_esc($s){
 		return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
 	}
 }
-// 渠道图标底色归类（纯视觉映射，不改动支付方式数据与提交逻辑）
 if(!function_exists('epay_icon_cls')){
 	function epay_icon_cls($name){
 		$n = strtolower((string)$name);
@@ -44,99 +42,149 @@ if(!function_exists('epay_icon_cls')){
 	}
 }
 $payamount = $row['realmoney'] ? $row['realmoney'] : $row['money'];
+$has_fee = $row['realmoney'] && $row['realmoney'] != $row['money'];
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+<meta name="theme-color" content="#f0f4fa">
 <title>安全支付 | <?php echo epay_esc($sitename?$sitename:$conf['sitename'])?></title>
-<link href="/assets/css/checkout.css" rel="stylesheet" type="text/css">
+<link href="/assets/css/checkout.css?v=2" rel="stylesheet" type="text/css">
 </head>
-<body>
-<div class="epay-page">
-	<div class="epay-card">
+<body class="epay-body--cashier">
+<div class="epay-bg">
+	<div class="epay-bg__circle epay-bg__circle--1"></div>
+	<div class="epay-bg__circle epay-bg__circle--2"></div>
+	<div class="epay-bg__circle epay-bg__circle--3"></div>
+</div>
+
+<div class="epay-cashier">
+	<div class="epay-cashier__card">
 		<input type="hidden" name="trade_no" value="<?php echo epay_esc($trade_no)?>"/>
-		<!-- 头部 -->
-		<header class="epay-head">
-			<div class="epay-head__brand">
-				<img class="epay-head__logo" src="/assets/img/logo.png" alt="logo">
-				<span>安全支付</span>
+
+		<!-- 顶部品牌栏 -->
+		<header class="epay-cashier__header">
+			<div class="epay-cashier__brand">
+				<div class="epay-cashier__logo">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+				</div>
+				<div class="epay-cashier__brand-text">
+					<span class="epay-cashier__brand-name"><?php echo epay_esc($sitename?$sitename:$conf['sitename'])?></span>
+					<span class="epay-cashier__brand-sub">安全支付结算</span>
+				</div>
 			</div>
-			<span class="epay-head__secure">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-				订单信息已加密
-			</span>
+			<div class="epay-cashier__secure">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+				<span>SSL 加密</span>
+			</div>
 		</header>
 
 <?php if($other){?>
-		<!-- 支付通道维护提示 -->
-		<div class="epay-alert epay-alert--warning">当前支付方式暂时关闭维护，请更换其他方式支付</div>
+		<div class="epay-cashier__notice epay-cashier__notice--warning">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+			<span>当前支付方式暂时关闭维护，请更换其他方式支付</span>
+		</div>
 <?php if(in_array('qqpay',array_column($paytype,'name'))){?>
-		<div class="epay-alert epay-alert--info">
-			<div>
-				<p>如果您需要微信支付请将微信余额转到QQ再选择QQ钱包支付！</p>
-				<p><a class="epay-link-btn" href="./wx.html">点击查看微信余额转到QQ钱包教程</a></p>
-			</div>
+		<div class="epay-cashier__notice epay-cashier__notice--info">
+			<p>如果您需要微信支付请将微信余额转到QQ再选择QQ钱包支付！</p>
+			<p><a href="./wx.html" class="epay-cashier__link">点击查看微信余额转到QQ钱包教程</a></p>
 		</div>
 <?php }}else{?>
-		<!-- 订单摘要 -->
-		<div class="epay-summary">
-			<p class="epay-summary__name"><?php echo epay_esc($row['name'])?></p>
-			<p class="epay-summary__merchant"><?php echo epay_esc($sitename?$sitename:$conf['sitename'])?></p>
+		<!-- 金额区 -->
+		<div class="epay-cashier__amount">
+			<div class="epay-cashier__amount-label">支付金额</div>
+			<div class="epay-cashier__amount-value">
+				<span class="epay-cashier__amount-currency">¥</span>
+				<span class="epay-cashier__amount-num"><?php echo epay_esc($payamount)?></span>
+			</div>
+			<div class="epay-cashier__amount-goods"><?php echo epay_esc($row['name'])?></div>
 		</div>
-		<div class="epay-amount">
-			<span class="epay-amount__currency">¥</span>
-			<span class="epay-amount__value"><?php echo epay_esc($payamount)?></span>
-		</div>
-		<dl class="epay-order-meta">
-			<div class="epay-order-meta__row"><dt class="epay-order-meta__label">订单号</dt><dd class="epay-order-meta__value"><?php echo epay_esc($trade_no)?></dd></div>
-			<div class="epay-order-meta__row"><dt class="epay-order-meta__label">商品名称</dt><dd class="epay-order-meta__value"><b><?php echo epay_esc($row['name'])?></b></dd></div>
-			<div class="epay-order-meta__row"><dt class="epay-order-meta__label">创建时间</dt><dd class="epay-order-meta__value"><?php echo epay_esc($row['addtime'])?></dd></div>
-			<div class="epay-order-meta__row"><dt class="epay-order-meta__label">订单金额</dt><dd class="epay-order-meta__value"><b><?php echo epay_esc($row['money'])?></b> 元</dd></div>
-<?php if($row['realmoney'] && $row['realmoney']!=$row['money']){?>
-			<div class="epay-order-meta__row"><dt class="epay-order-meta__label">实付金额</dt><dd class="epay-order-meta__value"><b><?php echo epay_esc($row['realmoney'])?></b> 元 <span class="epay-fee">(含<?php echo epay_esc($row['realmoney']-$row['money'])?>元手续费)</span></dd></div>
+
+		<!-- 订单信息 -->
+		<div class="epay-cashier__order">
+			<div class="epay-cashier__order-row">
+				<span class="epay-cashier__order-label">订单号</span>
+				<span class="epay-cashier__order-value epay-cashier__order-value--mono"><?php echo epay_esc($trade_no)?></span>
+			</div>
+			<div class="epay-cashier__order-row">
+				<span class="epay-cashier__order-label">商品名称</span>
+				<span class="epay-cashier__order-value"><?php echo epay_esc($row['name'])?></span>
+			</div>
+			<div class="epay-cashier__order-row">
+				<span class="epay-cashier__order-label">创建时间</span>
+				<span class="epay-cashier__order-value"><?php echo epay_esc($row['addtime'])?></span>
+			</div>
+			<div class="epay-cashier__order-row">
+				<span class="epay-cashier__order-label">订单金额</span>
+				<span class="epay-cashier__order-value">¥ <?php echo epay_esc($row['money'])?></span>
+			</div>
+<?php if($has_fee){?>
+			<div class="epay-cashier__order-row epay-cashier__order-row--highlight">
+				<span class="epay-cashier__order-label">实付金额</span>
+				<span class="epay-cashier__order-value epay-cashier__order-value--strong">¥ <?php echo epay_esc($row['realmoney'])?> <span class="epay-cashier__fee">(含手续费 ¥<?php echo epay_esc($row['realmoney']-$row['money'])?>)</span></span>
+			</div>
 <?php }?>
-		</dl>
-		<hr class="epay-divider">
+		</div>
 <?php }?>
 
 		<!-- 支付方式 -->
-		<section class="epay-section">
-			<h2 class="epay-section__title">选择支付方式</h2>
-			<ul class="epay-methods types">
+		<div class="epay-cashier__methods">
+			<div class="epay-cashier__methods-title">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+				选择支付方式
+			</div>
+			<ul class="epay-cashier__method-list types">
 <?php foreach($paytype as $rows){?>
-				<li class="epay-method pay_li" value="<?php echo epay_esc($rows['id'])?>">
-					<span class="epay-method__icon epay-method__icon--<?php echo epay_icon_cls($rows['name'])?>"><img src="/assets/icon/<?php echo epay_esc($rows['name'])?>.ico" alt="<?php echo epay_esc($rows['showname'])?>"></span>
-					<span class="epay-method__body">
-						<span class="epay-method__name"><?php echo epay_esc($rows['showname'])?></span>
-					</span>
-					<span class="epay-method__radio"></span>
+				<li class="epay-cashier__method pay_li" value="<?php echo epay_esc($rows['id'])?>">
+					<div class="epay-cashier__method-icon epay-cashier__method-icon--<?php echo epay_icon_cls($rows['name'])?>">
+						<img src="/assets/icon/<?php echo epay_esc($rows['name'])?>.ico" alt="<?php echo epay_esc($rows['showname'])?>" onerror="this.style.display='none';this.parentNode.classList.add('is-fallback')">
+					</div>
+					<div class="epay-cashier__method-info">
+						<span class="epay-cashier__method-name"><?php echo epay_esc($rows['showname'])?></span>
+					</div>
+					<div class="epay-cashier__method-radio">
+						<div class="epay-cashier__method-radio-dot"></div>
+					</div>
 				</li>
 <?php }?>
 			</ul>
-		</section>
+		</div>
 
 		<!-- 立即支付 -->
-		<div style="margin-top:24px">
-			<button type="button" class="epay-btn epay-btn--primary epay-btn--block immediate_pay">立即支付</button>
+		<div class="epay-cashier__action">
+			<button type="button" class="epay-cashier__pay-btn immediate_pay">
+				<span>立即支付</span>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+			</button>
 		</div>
 
 		<!-- 信任条 -->
-		<div class="epay-trust">
-			<span class="epay-trust__item epay-trust__item--lock">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-				安全支付 · 订单信息已加密传输
-			</span>
+		<div class="epay-cashier__trust">
+			<div class="epay-cashier__trust-item">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+				<span>安全支付</span>
+			</div>
+			<div class="epay-cashier__trust-divider"></div>
+			<div class="epay-cashier__trust-item">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+				<span>信息加密传输</span>
+			</div>
+			<div class="epay-cashier__trust-divider"></div>
+			<div class="epay-cashier__trust-item">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+				<span>支付通道认证</span>
+			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- 提示层（保留原结构与 errorContent/close_btn，供兼容；默认隐藏） -->
-	<div class="mt_agree" style="display:none">
-		<div class="mt_agree_main">
-			<h2>提示信息</h2>
-			<p id="errorContent" style="text-align:center;line-height:36px;"></p>
-			<a class="close_btn">确定</a>
-		</div>
+<!-- 提示层（保留原结构与 selector） -->
+<div class="mt_agree" style="display:none">
+	<div class="mt_agree_main">
+		<h2>提示信息</h2>
+		<p id="errorContent" style="text-align:center;line-height:36px;"></p>
+		<a class="close_btn">确定</a>
 	</div>
 </div>
 
@@ -145,9 +193,9 @@ $payamount = $row['realmoney'] ? $row['realmoney'] : $row['money'];
 $(document).ready(function(){
 	$(".types li").click(function(){
 		$(".types li").each(function(){
-			$(this).attr('class','epay-method pay_li');
+			$(this).attr('class','epay-cashier__method pay_li');
 		});
-		$(this).attr('class','epay-method pay_li is-active');
+		$(this).attr('class','epay-cashier__method pay_li is-active');
 	});
 	$(document).on("click", ".immediate_pay", function () {
 		var value = $(".types").find('.is-active').attr('value');
