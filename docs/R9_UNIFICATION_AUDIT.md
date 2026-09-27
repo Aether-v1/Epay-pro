@@ -1,0 +1,105 @@
+# Epay-pro R9 unification audit
+
+## 1. Final verdict
+
+**PASS WITH CONDITIONS on the feature branch.** The cashier UI and local checks pass. A real database, payment channel credentials and callback receiver were not available for an end-to-end money movement test. Do not merge or push `master` until these checks pass in staging. The outer reference tree remains intact until the canonical remote and deployment are verified.
+
+## 2. Before
+
+| Item | Canonical inner repository | Outer reference tree |
+| --- | --- | --- |
+| Path | `E:/Users/orang/Downloads/Compressed/epay/3141cafcd7ae4fca951c5bf6cc62aec2/epay` | `E:/Users/orang/Downloads/Compressed/epay` |
+| Branch / HEAD | `master` / `22ac78dc85f9166b70f26331149d07183462daa2` | `main` / `a28edfa1111aacad78fcf334a131292f95f03301` |
+| Remote | `origin=https://github.com/Aether-v1/Epay-pro.git` | `origin=https://github.com/maajiko/Epay.git` in renamed metadata |
+| Worktree | Clean | `README.md` deleted; renamed Git metadata, archive and nested repository untracked |
+
+The inner repository has tag `PHASE2_BASELINE`. The outer repository has `pay`, `v3096`, and `v3097-2026/02/28`.
+
+## 3. After
+
+| Item | State |
+| --- | --- |
+| Canonical branch | `audit/r9-unify-modern-ui` based on `22ac78d` |
+| Feature HEAD before the report commit | `1188f75` |
+| Origin fetch/push | `https://github.com/Aether-v1/Epay-pro.git` |
+| Master | Unchanged pending staging payment verification |
+| Outer reference | Unchanged; not used as a push target |
+| Feature branch remote | Verify after push in the final delivery report |
+
+## 4. Repository unification
+
+The inner Aether repository is the only canonical development baseline. The outer maajiko history was read as a reference. The cashier now follows the actual 2026-09-27 `docs/checkout-preview.html?v=3` visual design: light gray background, merchant logo above a narrow white card, left-aligned amount, compact order summary, white channel rows, black selected border and black pay button. The two code trees differ at 521 same-path files; copying the outer tree would discard later business and security changes. See `R9_DIFF_INVENTORY.md`.
+
+Physical archive/removal of the outer tree is deferred until master deployment and remote state are verified. It contains a renamed Git database and a separate archive, and already has a missing `README.md`; these are not safe to discard under an incomplete payment gate.
+
+## 5. Cashier and design system
+
+- Before: `99f99c7` restored the legacy `reset.css` + `main12.css` cashier DOM.
+- V2 source: `32b6874` supplied an earlier gradient treatment and channel icon fallback. Its cashier appearance was not selected for V3.
+- Outer reference: `2ae68b5` and `docs/checkout-preview.html?v=3` supplied the chosen compact, neutral card appearance, explicit payment method controls, separate JS, parameter encoding and repeat-submit protection.
+- V3 uses native radio inputs in a GET form, so method selection and submit work without JS. JS handles validated encoded navigation, repeated submission and browser back navigation.
+- Business inputs and server route remain `pre_order`, status, gid, `Channel::getTypes`, WeChat method order, `realmoney`, fee, `other`, and `submit2.php`.
+- Canonical stylesheet: `assets/css/checkout.css`; cashier-specific rules are scoped under `body.checkout-cashier`. Other payment pages keep their existing `epay-` styles in this file. The cashier intentionally follows the reference preview's light color scheme, including on a dark OS setting.
+- Cashier JS: `assets/js/checkout.js`. No second `checkout.css` is introduced into the canonical tree.
+- Legacy cashier CSS files were removed only after a recursive project reference search found no runtime use; see `R9_CLEANUP_REPORT.md`.
+
+## 6. Security audit
+
+| Area | Finding / action | Limit |
+| --- | --- | --- |
+| XSS | Cashier dynamic merchant, order, money, payment labels and attributes use `epay_esc()` with `ENT_QUOTES | ENT_SUBSTITUTE`. JS uses `textContent`; it does not write dynamic HTML. | Other existing payment views were not rewritten. |
+| Icon path | The name must match a basename allowlist, cannot contain `..`, and must resolve to an existing icon; otherwise a CSS fallback is shown. | Existing icon files remain unchanged. |
+| SQL | The cashier continues to pass `trade_no` through `daddslashes()`; `submit2.php` converts `typeid` with `intval()`. Neither query nor channel-selection core was changed. | Existing SQL string interpolation should be separately reviewed for parameterization; no injection was proven in this R9 UI change. |
+| Redirect | Cashier JS encodes `typeid` and `trade_no` with `encodeURIComponent()`; native GET form is the no-JS path. | Existing plugin-provided redirects in `includes/lib/Payment.php` and callbacks were not altered or live-tested. |
+| Payment integrity | The page submits only `typeid` and `trade_no`; displayed money is not posted. `submit2.php` reloads `pre_order`, checks status and computes `realmoney` server-side. | Real channel, notify and return processing need staging verification. |
+| CSRF | Checked admin POST handlers such as `admin/ajax.php`, `ajax_pay.php`, `ajax_order.php`, `ajax_settle.php`, `ajax_user.php` and transfer/profitsharing endpoints call `csrf_verify()`. | This was a spot check, not a full admin endpoint proof. |
+| Sensitive data | `config.php` is ignored; no tracked private PEM was found. Tracked PEM files checked are public keys. A tracked literal scan yielded four non-secret code templates/dynamic expressions. | Local ignored configuration may contain production secrets and must not be staged. Git history was not exhaustively scanned. |
+
+Potential pre-existing review item: `includes/common.php` forms `$siteurl` from the HTTP Host header and selects CDN hosts from `$conf['cdnpublic']`. Deployment host validation should be checked before changing core redirect behavior.
+
+## 7. Cleanup
+
+Deleted files and evidence are in `R9_CLEANUP_REPORT.md`. No files in `admin`, `user`, `install`, `includes/lib`, `plugins` or third-party packages were removed.
+
+## 8. Configuration and hardcoding
+
+| Item | Current source | Recommended owner |
+| --- | --- | --- |
+| Database host/user/password | Ignored `config.php`; `config.php.example` has placeholders | Installation or environment-secret management; never Git |
+| Merchant/site name | `$conf['sitename']` and optional encoded cashier name | Existing backend configuration |
+| Public CDN choices | `includes/common.php` selects known hosts from `$conf['cdnpublic']` | Existing backend configuration; review provider availability separately |
+| Site and callback base URL | `$siteurl` / `$conf['localurl']` | Deploy configuration with trusted host validation |
+| Logo path in public templates | `/assets/img/logo.png` | Existing static asset; backend branding option is a separate feature |
+| Payment URL and channel secrets | Plugin/configuration dependent | Backend configuration or ignored secret file |
+
+No configuration migration was made in this UI task because changing payment URLs, callback protocol or secret loading without a deployment test would be unsafe.
+
+## 9. Tests
+
+| Check | Status | Evidence |
+| --- | --- | --- |
+| `php -l cashier.php` | PASS | No syntax errors |
+| `node --check assets/js/checkout.js` | PASS | No syntax errors |
+| `git diff --check` | PASS | No whitespace or conflict errors |
+| Mock cashier: fee, XSS, WeChat ordering, `other=1`, no methods, one or multiple methods, unknown icon | PASS | Isolated PHP fixture; no production DB used. No PHP warnings in these cases. |
+| JS: encoded parameters, repeat click, missing method/order, back navigation | PASS | Node VM with DOM stubs |
+| Chromium 1280px desktop, 390px mobile | PASS | Rendered fixture visually compared with `docs/checkout-preview.html?v=3`; CDP device emulation measured a 390px viewport, 390px document width, 358px card and no horizontal overflow. |
+| Dark OS color scheme | PASS | Reference preview sets `color-scheme: light`; the cashier uses the same deliberate light appearance. |
+| Safari, WeChat, Alipay in-app browsers | NOT RUN | Browsers/devices unavailable in this environment |
+| Live `cashier → submit2 → Channel → plugin → QR/H5/WAP/JSAPI → notify → return` | NOT RUN | No safe staging order, database or channel credentials supplied |
+| Real order status, signing and callback | NOT RUN | Requires staging payment integration |
+
+## 10. Git commits
+
+| Commit | Change |
+| --- | --- |
+| `92b40ce` | Align the canonical checkout CSS with the supplied preview. |
+| `132c4a2` | Render the preview-style cashier and add encoded JS form navigation. |
+| `1188f75` | Remove the two old cashier stylesheets after a reference scan. |
+| This document's commit | Inventory, cleanup evidence and gate result. |
+
+Master remains at `22ac78d` while the staging gate is incomplete.
+
+## 11. Remote verification
+
+Target: `Aether-v1/Epay-pro`. The feature branch remote SHA must be checked after push. Master HEAD must remain `22ac78d` until the payment gate passes.
