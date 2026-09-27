@@ -404,9 +404,9 @@ function sysmsg($msg = '未知的异常',$title = '站点提示信息') {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo $safe_title?></title>
-        <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+        <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
     </head>
-    <body class="epay-page">
+    <body class="epay-page epay-interstitial">
         <div class="epay-card">
             <div class="epay-status epay-status--error">
                 <div class="epay-status__icon" aria-hidden="true">!</div>
@@ -422,7 +422,10 @@ function sysmsg($msg = '未知的异常',$title = '站点提示信息') {
     <?php
     exit;
 }
-function returnTemplate($return_url) {
+function returnTemplate($return_url, $success = true) {
+	global $sitename, $conf;
+	$merchantName = !empty($sitename) ? $sitename : (isset($conf['sitename']) ? $conf['sitename'] : '');
+	$merchantName = safe_html($merchantName);
 	$url = base64_encode($return_url);
     ?>
     <!DOCTYPE html>
@@ -430,20 +433,24 @@ function returnTemplate($return_url) {
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>支付成功</title>
-        <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+        <title><?php echo $success ? '支付成功' : '订单未完成' ?></title>
+        <meta name="theme-color" content="#f5f5f7">
+        <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
     </head>
-    <body class="epay-page">
-        <div class="epay-card">
-            <div class="epay-status epay-status--success">
-                <div class="epay-status__icon" aria-hidden="true">✓</div>
-                <h1 class="epay-status__title">支付成功</h1>
-                <p class="epay-status__desc">订单已完成，正在返回商户...</p>
-                <div class="epay-status__actions">
-                    <a href="javascript:void(0)" id="epay-return-link" class="epay-btn epay-btn--primary">返回商户</a>
+    <body class="checkout-page checkout-transition-page checkout-return-page<?php echo $success ? '' : ' checkout-return-error' ?>">
+        <main class="checkout-shell">
+            <div class="checkout-brand"><img src="/assets/img/logo.png" alt=""><?php echo $merchantName ?></div>
+            <div class="checkout-card checkout-status" role="status">
+                <div class="checkout-status-icon" aria-hidden="true"><?php if ($success) { ?><svg viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7"/></svg><?php } else { ?>!<?php } ?></div>
+                <p class="checkout-eyebrow">安全支付 · <?php echo $success ? '支付完成' : '订单状态异常' ?></p>
+                <h1 class="checkout-status-title"><?php echo $success ? '支付成功' : '订单未完成' ?></h1>
+                <p class="checkout-status-desc"><?php echo $success ? '订单已完成，正在返回商户…' : '请返回商户查看订单结果…' ?></p>
+                <div class="checkout-actions">
+                    <a href="javascript:void(0)" id="epay-return-link" class="checkout-button">返回商户</a>
                 </div>
             </div>
-        </div>
+            <p class="checkout-footer"><?php echo $merchantName ?></p>
+        </main>
         <script>window.location.href=window.atob("<?php echo $url?>");</script>
         <script>
         (function(){
@@ -469,7 +476,7 @@ function submitTemplate($html_text){
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>正在前往支付页面</title>
         <meta name="theme-color" content="#f5f5f7">
-        <link href="/assets/css/checkout.css?v=4" rel="stylesheet" media="screen">
+        <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
         <script>document.documentElement.classList.add('checkout-js');</script>
     </head>
     <body class="checkout-page checkout-transition-page">

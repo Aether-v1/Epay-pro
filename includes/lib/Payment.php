@@ -387,7 +387,7 @@ class Payment {
             include_once SYSTEM_ROOT.'txprotect.php';
             if($order['status'] == 2 || $order['black']){
                 $jumpurl = '/payerr.html';
-                returnTemplate($jumpurl);
+                returnTemplate($jumpurl, false);
                 return;
             }
             // 支付完成5分钟后禁止跳转回网站

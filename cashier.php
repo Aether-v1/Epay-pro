@@ -60,7 +60,7 @@ $has_fee = $row['realmoney'] && $row['realmoney'] != $row['money'];
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f5f7">
 <title>安全支付 | <?php echo epay_esc($merchantName) ?></title>
-<link rel="stylesheet" href="/assets/css/checkout.css?v=3">
+<link rel="stylesheet" href="/assets/css/checkout.css?v=5">
 </head>
 <body class="checkout-page checkout-cashier">
 <main class="checkout-shell">

@@ -7,9 +7,9 @@ if(!defined('IN_CRONLITE'))exit();
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>错误提示</title>
-    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+    <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
 <div class="epay-card epay-status-card">
     <div class="epay-status epay-status--error">
         <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>

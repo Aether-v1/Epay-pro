@@ -18,9 +18,9 @@ $html .= '<input type="submit" value="Loading"></form>';
 <meta name="renderer" content="webkit" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>正在进行支付安全验证，请稍候...</title>
-<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
+<link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen" />
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
 <div class="epay-card">  <div class="epay-status epay-status--waiting">
     <div class="epay-status__icon"><span class="epay-spinner epay-spinner--lg" aria-hidden="true"></span></div>
     <h1 class="epay-status__title" id="waiting">正在进行支付安全验证，请稍候...</h1>

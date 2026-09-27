@@ -9,9 +9,9 @@ if(!defined('IN_PLUGIN'))exit();
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>支付结果</title>
-    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+    <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
     <div class="epay-card">
         <div class="epay-status epay-status--waiting">
             <div class="epay-status__icon" aria-hidden="true"><span class="epay-spinner" role="status" aria-label="正在检测付款"></span></div>

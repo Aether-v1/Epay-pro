@@ -20,9 +20,9 @@ if(strpos($useragent, 'iphone')!==false || strpos($useragent, 'ipod')!==false){
 <meta name="renderer" content="webkit" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>支付提示</title>
-<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
+<link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen" />
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
 <div class="epay-card">
   <div class="epay-status epay-status--warning">
     <div class="epay-status__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>

@@ -10,9 +10,9 @@ if (!defined('IN_CRONLITE')) exit();
 <meta name="renderer" content="webkit" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>实名认证成功</title>
-<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
+<link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen" />
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
 <div class="epay-card">
   <div class="epay-status epay-status--success">
     <div class="epay-status__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>

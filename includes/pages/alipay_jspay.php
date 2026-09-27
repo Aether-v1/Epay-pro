@@ -10,9 +10,9 @@ if (!defined('IN_PLUGIN')) exit();
 <meta name="renderer" content="webkit" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>支付宝支付</title>
-<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen" />
+<link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen" />
 </head>
-<body class="epay-page epay-h5-page epay-channel--alipay">
+<body class="epay-page epay-interstitial epay-h5-page epay-channel--alipay">
 <div class="epay-card">  <div class="epay-head">
     <span class="epay-head__brand">
       <svg class="epay-head__logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>

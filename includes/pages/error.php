@@ -10,9 +10,9 @@ if(!defined('IN_PLUGIN'))exit();
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>错误提示</title>
-    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+    <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
 <div class="epay-card">
     <div class="epay-status epay-status--error">
         <div class="epay-status__icon" aria-hidden="true">!</div>

@@ -16,9 +16,9 @@ $codename = !empty($userrow['codename'])?$userrow['codename']:$userrow['username
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>支付成功页面</title>
-    <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+    <link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen">
 </head>
-<body class="epay-page">
+<body class="epay-page epay-interstitial">
 <div class="epay-card epay-status-card">
     <div class="epay-status epay-status--success">
         <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>

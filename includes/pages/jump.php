@@ -19,9 +19,9 @@ if(strpos($useragent, 'iphone')!==false || strpos($useragent, 'ipod')!==false){
 <meta name="format-detection" content="telephone=no"/>
 <meta content="false" name="twcClient" id="twcClient"/>
 <meta name="aplus-touch" content="1"/>
-<link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen"/>
+<link href="/assets/css/checkout.css?v=5" rel="stylesheet" media="screen"/>
 </head>
-<body class="epay-page epay-jump-page">
+<body class="epay-page epay-interstitial epay-jump-page">
 <div class="epay-jump-card">
   <div class="epay-jump-box">
     <div class="epay-jump-icon">
