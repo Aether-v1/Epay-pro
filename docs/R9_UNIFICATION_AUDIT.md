@@ -24,7 +24,7 @@ The inner repository has tag `PHASE2_BASELINE`. The outer repository has `pay`, 
 | Origin fetch/push | `https://github.com/Aether-v1/Epay-pro.git` |
 | Master | Unchanged pending staging payment verification |
 | Outer reference | Unchanged; not used as a push target |
-| Feature branch remote | Verify after push in the final delivery report |
+| Feature branch remote | First push verified at `cc32ea2d6cccc52432cf733bb9d7936e7a7d3a03`; documentation update follows |
 
 ## 4. Repository unification
 
@@ -96,10 +96,10 @@ No configuration migration was made in this UI task because changing payment URL
 | `92b40ce` | Align the canonical checkout CSS with the supplied preview. |
 | `132c4a2` | Render the preview-style cashier and add encoded JS form navigation. |
 | `1188f75` | Remove the two old cashier stylesheets after a reference scan. |
-| This document's commit | Inventory, cleanup evidence and gate result. |
+| `cc32ea2` | Inventory, cleanup evidence and gate result. |
 
 Master remains at `22ac78d` while the staging gate is incomplete.
 
 ## 11. Remote verification
 
-Target: `Aether-v1/Epay-pro`. The feature branch remote SHA must be checked after push. Master HEAD must remain `22ac78d` until the payment gate passes.
+`git ls-remote origin` verified the Aether remote after the first push: feature branch `cc32ea2d6cccc52432cf733bb9d7936e7a7d3a03`; `master` `22ac78dc85f9166b70f26331149d07183462daa2`. The final documentation update is pushed separately and its remote SHA is reported in the delivery summary. Master remains unchanged because the live payment gate has not passed.
