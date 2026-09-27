@@ -896,192 +896,193 @@
 .epay-qrpc-page .epay-card { max-width: 480px; margin: 0 auto; }
 .epay-qrpc-page .epay-qr__box--pc { width: 240px; height: 240px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
 .epay-qrpc-page .epay-qr__box--pc iframe { width: 230px; height: 230px; border: 0; display: block; }
-/* ---------- 31. Premium Cashier (v2) ---------- */
-.epay-body--cashier {
-  margin: 0; padding: 0; min-height: 100vh;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  background: linear-gradient(135deg, #eef2f9 0%, #f5f7fb 50%, #e8edf6 100%);
-  color: #0f172a; overflow-x: hidden; -webkit-font-smoothing: antialiased;
+/* ---------- 31. Cashier V3 — checkout-preview.html?v=3 ---------- */
+body.checkout-cashier {
+  --ck-bg: #f5f5f7;
+  --ck-card: #fff;
+  --ck-text: #1d1d1f;
+  --ck-muted: #6e6e73;
+  --ck-soft: #86868b;
+  --ck-line: #e5e5ea;
+  --ck-red: #ff3b30;
+  --ck-shadow: 0 20px 60px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.03);
+  color-scheme: light;
+  box-sizing: border-box;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ck-bg);
+  color: var(--ck-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
-.epay-bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-.epay-bg__circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; }
-.epay-bg__circle--1 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(59,130,246,.25), transparent 70%); top: -120px; right: -80px; }
-.epay-bg__circle--2 { width: 360px; height: 360px; background: radial-gradient(circle, rgba(16,185,129,.18), transparent 70%); bottom: -100px; left: -60px; }
-.epay-bg__circle--3 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(139,92,246,.15), transparent 70%); top: 40%; left: 55%; }
-
-.epay-cashier { position: relative; z-index: 1; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; box-sizing: border-box; }
-.epay-cashier__card {
-  width: 100%; max-width: 460px; background: #fff; border-radius: 28px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,.04), 0 20px 50px -12px rgba(15,23,42,.12), 0 0 0 1px rgba(226,232,240,.6);
-  padding: 32px 28px 24px; box-sizing: border-box; position: relative; overflow: hidden;
+.checkout-cashier *, .checkout-cashier *::before, .checkout-cashier *::after { box-sizing: border-box; }
+.checkout-cashier .checkout-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
 }
-.epay-cashier__card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  background: linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6);
+.checkout-cashier .checkout-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 0 22px;
+  color: var(--ck-text);
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
-
-/* Header */
-.epay-cashier__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.epay-cashier__brand { display: flex; align-items: center; gap: 12px; }
-.epay-cashier__logo {
-  width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(59,130,246,.3);
+.checkout-cashier .checkout-brand img { width: 30px; height: 30px; object-fit: contain; }
+.checkout-cashier .checkout-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 32px;
+  background: var(--ck-card);
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 26px;
+  box-shadow: var(--ck-shadow);
 }
-.epay-cashier__logo svg { width: 22px; height: 22px; }
-.epay-cashier__brand-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.epay-cashier__brand-name { font-size: 15px; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
-.epay-cashier__brand-sub { font-size: 11px; color: #94a3b8; font-weight: 500; letter-spacing: .5px; }
-.epay-cashier__secure {
-  display: flex; align-items: center; gap: 5px; font-size: 11px; color: #64748b; font-weight: 500;
-  background: #f1f5f9; padding: 6px 10px; border-radius: 20px; flex-shrink: 0;
+.checkout-cashier .checkout-eyebrow {
+  margin: 0;
+  color: var(--ck-muted);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .02em;
 }
-.epay-cashier__secure svg { width: 13px; height: 13px; color: #10b981; }
-
-/* Notice */
-.epay-cashier__notice { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border-radius: 14px; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
-.epay-cashier__notice svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
-.epay-cashier__notice--warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
-.epay-cashier__notice--warning svg { color: #f59e0b; }
-.epay-cashier__notice--info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; flex-direction: column; }
-.epay-cashier__notice--info p { margin: 0; }
-.epay-cashier__link { color: #2563eb; text-decoration: none; font-weight: 600; }
-.epay-cashier__link:hover { text-decoration: underline; }
-
-/* Amount */
-.epay-cashier__amount { text-align: center; padding: 8px 0 24px; }
-.epay-cashier__amount-label { font-size: 13px; color: #94a3b8; font-weight: 500; margin-bottom: 8px; letter-spacing: 1px; }
-.epay-cashier__amount-value { display: flex; align-items: baseline; justify-content: center; gap: 2px; }
-.epay-cashier__amount-currency { font-size: 28px; font-weight: 600; color: #0f172a; }
-.epay-cashier__amount-num { font-size: 52px; font-weight: 800; color: #0f172a; letter-spacing: -1px; line-height: 1; font-variant-numeric: tabular-nums; }
-.epay-cashier__amount-goods { margin-top: 10px; font-size: 14px; color: #64748b; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 16px; }
-
-/* Order info */
-.epay-cashier__order { background: #f8fafc; border-radius: 16px; padding: 16px 18px; margin-bottom: 24px; border: 1px solid #f1f5f9; }
-.epay-cashier__order-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; gap: 12px; }
-.epay-cashier__order-row + .epay-cashier__order-row { border-top: 1px dashed #e2e8f0; }
-.epay-cashier__order-label { color: #94a3b8; font-weight: 500; flex-shrink: 0; }
-.epay-cashier__order-value { color: #334155; font-weight: 500; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 65%; }
-.epay-cashier__order-value--mono { font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 12px; }
-.epay-cashier__order-value--strong { color: #0f172a; font-weight: 700; }
-.epay-cashier__order-row--highlight { background: #eff6ff; margin: 4px -18px -4px; padding: 10px 18px; border-radius: 0 0 16px 16px; border-top: 1px solid #bfdbfe !important; }
-.epay-cashier__fee { font-size: 11px; color: #64748b; font-weight: 400; }
-
-/* Methods */
-.epay-cashier__methods { margin-bottom: 24px; }
-.epay-cashier__methods-title {
-  display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 14px;
+.checkout-cashier .checkout-amount {
+  display: block;
+  margin: 8px 0 20px;
+  font-size: clamp(32px, 8vw, 44px);
+  line-height: 1.14;
+  font-weight: 650;
+  letter-spacing: -1.5px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.epay-cashier__methods-title svg { width: 16px; height: 16px; color: #3b82f6; }
-.epay-cashier__method-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.epay-cashier__method {
-  display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px;
-  border: 1.5px solid #e2e8f0; background: #fff; cursor: pointer; transition: all .2s cubic-bezier(.4,0,.2,1);
+.checkout-cashier .checkout-amount .currency { font-size: .65em; vertical-align: 9%; letter-spacing: 0; }
+.checkout-cashier .checkout-summary {
+  margin: 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--ck-line);
+  border-bottom: 1px solid var(--ck-line);
+}
+.checkout-cashier .checkout-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.checkout-cashier .checkout-row dt { color: var(--ck-soft); flex: none; }
+.checkout-cashier .checkout-row dd {
+  min-width: 0;
+  margin: 0;
+  text-align: right;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.checkout-cashier .checkout-section-title { margin: 24px 0 13px; font-size: 15px; font-weight: 600; }
+.checkout-cashier .checkout-methods { display: grid; gap: 10px; margin: 0; padding: 0; }
+.checkout-cashier .checkout-method { position: relative; display: block; cursor: pointer; }
+.checkout-cashier .checkout-method input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.checkout-cashier .checkout-method__surface {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 11px 14px;
+  background: #fff;
+  border: 1px solid var(--ck-line);
+  border-radius: 16px;
+  color: var(--ck-text);
+  font-size: 15px;
+  font-weight: 550;
+  text-align: left;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.checkout-cashier .checkout-method:hover .checkout-method__surface { background: #fafafa; transform: translateY(-1px); }
+.checkout-cashier .checkout-method input:checked + .checkout-method__surface { border: 1.5px solid var(--ck-text); background: #fafafa; }
+.checkout-cashier .checkout-method input:focus-visible + .checkout-method__surface,
+.checkout-cashier .checkout-button:focus-visible,
+.checkout-cashier .checkout-notice a:focus-visible { outline: 3px solid #698df6; outline-offset: 3px; }
+.checkout-cashier .checkout-method__icon {
   position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
 }
-.epay-cashier__method:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,23,42,.06); }
-.epay-cashier__method.is-active {
-  border-color: #3b82f6; background: linear-gradient(135deg, #eff6ff, #f0f9ff);
-  box-shadow: 0 4px 16px rgba(59,130,246,.15);
+.checkout-cashier .checkout-method__icon img { position: absolute; width: 32px; height: 32px; object-fit: contain; background: #fff; }
+.checkout-cashier .checkout-method__fallback { color: var(--ck-text); font-size: 19px; font-weight: 600; }
+.checkout-cashier .checkout-method__name { min-width: 0; overflow-wrap: anywhere; }
+.checkout-cashier .checkout-method .check {
+  display: none;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ck-text);
+  color: #fff;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
 }
-.epay-cashier__method-icon {
-  width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; position: relative; overflow: hidden;
+.checkout-cashier .checkout-method input:checked + .checkout-method__surface .check { display: block; }
+.checkout-cashier .checkout-actions { margin-top: 24px; }
+.checkout-cashier .checkout-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 54px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 15px;
+  background: var(--ck-text);
+  color: #fff;
+  text-decoration: none;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s ease, transform .18s ease;
 }
-.epay-cashier__method-icon img { width: 28px; height: 28px; object-fit: contain; }
-.epay-cashier__method-icon.is-fallback::after {
-  content: '?'; font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center;
-  width: 100%; height: 100%;
-}
-.epay-cashier__method-icon--wechat { background: linear-gradient(135deg, #07c160, #06ad56); }
-.epay-cashier__method-icon--alipay { background: linear-gradient(135deg, #1677ff, #0958d9); }
-.epay-cashier__method-icon--qq { background: linear-gradient(135deg, #12b7f5, #0ea5e9); }
-.epay-cashier__method-icon--bank { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.epay-cashier__method-icon--usdt { background: linear-gradient(135deg, #26a17b, #15803d); }
-.epay-cashier__method-icon--default { background: linear-gradient(135deg, #64748b, #475569); }
-.epay-cashier__method-info { flex: 1; min-width: 0; }
-.epay-cashier__method-name { font-size: 15px; font-weight: 600; color: #0f172a; }
-.epay-cashier__method-radio {
-  width: 22px; height: 22px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all .2s; background: #fff;
-}
-.epay-cashier__method-radio-dot { width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; transform: scale(0); transition: transform .2s cubic-bezier(.4,0,.2,1); }
-.epay-cashier__method.is-active .epay-cashier__method-radio { border-color: #3b82f6; }
-.epay-cashier__method.is-active .epay-cashier__method-radio-dot { transform: scale(1); }
-
-/* Pay button */
-.epay-cashier__action { margin-bottom: 20px; }
-.epay-cashier__pay-btn {
-  width: 100%; height: 56px; border: none; border-radius: 16px; cursor: pointer;
-  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: #fff;
-  font-size: 17px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 8px 24px rgba(59,130,246,.35); transition: all .2s cubic-bezier(.4,0,.2,1);
-  font-family: inherit;
-}
-.epay-cashier__pay-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(59,130,246,.45); }
-.epay-cashier__pay-btn:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(59,130,246,.3); }
-.epay-cashier__pay-btn svg { width: 20px; height: 20px; }
-
-/* Trust */
-.epay-cashier__trust { display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
-.epay-cashier__trust-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #94a3b8; font-weight: 500; }
-.epay-cashier__trust-item svg { width: 13px; height: 13px; color: #94a3b8; }
-.epay-cashier__trust-divider { width: 1px; height: 12px; background: #e2e8f0; }
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .epay-body--cashier { background: linear-gradient(135deg, #0b0f17 0%, #111827 50%, #0f172a 100%); color: #e2e8f0; }
-  .epay-bg__circle--1 { background: radial-gradient(circle, rgba(59,130,246,.15), transparent 70%); }
-  .epay-bg__circle--2 { background: radial-gradient(circle, rgba(16,185,129,.1), transparent 70%); }
-  .epay-cashier__card { background: #1e293b; box-shadow: 0 4px 6px -1px rgba(0,0,0,.3), 0 20px 50px -12px rgba(0,0,0,.5), 0 0 0 1px rgba(51,65,85,.5); }
-  .epay-cashier__brand-name { color: #f1f5f9; }
-  .epay-cashier__brand-sub { color: #64748b; }
-  .epay-cashier__secure { background: #334155; color: #94a3b8; }
-  .epay-cashier__amount-currency, .epay-cashier__amount-num { color: #f1f5f9; }
-  .epay-cashier__amount-goods { color: #94a3b8; }
-  .epay-cashier__order { background: #0f172a; border-color: #1e293b; }
-  .epay-cashier__order-row + .epay-cashier__order-row { border-top-color: #1e293b; }
-  .epay-cashier__order-label { color: #64748b; }
-  .epay-cashier__order-value { color: #cbd5e1; }
-  .epay-cashier__order-value--strong { color: #f1f5f9; }
-  .epay-cashier__order-row--highlight { background: #1e3a5f; border-top-color: #2563eb !important; }
-  .epay-cashier__methods-title { color: #f1f5f9; }
-  .epay-cashier__method { background: #1e293b; border-color: #334155; }
-  .epay-cashier__method:hover { background: #263349; border-color: #475569; }
-  .epay-cashier__method.is-active { background: linear-gradient(135deg, #1e3a5f, #172554); border-color: #3b82f6; }
-  .epay-cashier__method-name { color: #f1f5f9; }
-  .epay-cashier__method-radio { background: #1e293b; border-color: #475569; }
-  .epay-cashier__notice--warning { background: #422006; color: #fde68a; border-color: #78350f; }
-  .epay-cashier__notice--info { background: #172554; color: #bfdbfe; border-color: #1e40af; }
-  .epay-cashier__trust { border-top-color: #334155; }
-  .epay-cashier__trust-item { color: #64748b; }
-  .epay-cashier__trust-item svg { color: #64748b; }
-  .epay-cashier__trust-divider { background: #334155; }
-}
-
-/* Mobile */
+.checkout-cashier .checkout-button:hover { background: #000; transform: translateY(-1px); }
+.checkout-cashier .checkout-button:active { transform: scale(.99); }
+.checkout-cashier .checkout-button[disabled] { opacity: .7; cursor: wait; transform: none; }
+.checkout-cashier .checkout-note { margin: 14px 0 0; color: var(--ck-muted); font-size: 12px; line-height: 1.6; text-align: center; }
+.checkout-cashier .checkout-error { margin: 12px 0 0; color: var(--ck-red); font-size: 13px; line-height: 1.5; }
+.checkout-cashier .checkout-error[hidden] { display: none; }
+.checkout-cashier .checkout-footer { margin: 24px 0 0; color: var(--ck-soft); font-size: 12px; text-align: center; overflow-wrap: anywhere; }
+.checkout-cashier .checkout-empty,
+.checkout-cashier .checkout-notice { margin: 0; color: var(--ck-muted); font-size: 13px; line-height: 1.6; }
+.checkout-cashier .checkout-notice { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--ck-bg); }
+.checkout-cashier .checkout-notice p { margin: 6px 0 0; }
+.checkout-cashier .checkout-notice a { color: var(--ck-text); }
 @media (max-width: 480px) {
-  .epay-cashier { padding: 0; align-items: stretch; }
-  .epay-cashier__card { max-width: 100%; border-radius: 0; min-height: 100vh; padding: 28px 20px 24px; box-shadow: none; display: flex; flex-direction: column; }
-  .epay-cashier__card::before { height: 3px; }
-  .epay-cashier__amount-num { font-size: 44px; }
-  .epay-cashier__amount-currency { font-size: 24px; }
-  .epay-cashier__brand-name { max-width: 140px; font-size: 14px; }
-  .epay-cashier__secure { display: none; }
-  .epay-cashier__order { padding: 14px; }
-  .epay-cashier__order-value { max-width: 60%; font-size: 12px; }
-  .epay-cashier__method { padding: 13px 14px; }
-  .epay-cashier__method-icon { width: 38px; height: 38px; border-radius: 10px; }
-  .epay-cashier__method-icon img { width: 24px; height: 24px; }
-  .epay-cashier__pay-btn { height: 54px; font-size: 16px; border-radius: 14px; }
-  .epay-cashier__trust { gap: 8px; flex-wrap: wrap; }
-  .epay-cashier__trust-divider { display: none; }
+  .checkout-cashier .checkout-shell { justify-content: flex-start; padding: 24px 16px 32px; }
+  .checkout-cashier .checkout-card { padding: 25px 22px; border-radius: 22px; }
 }
 @media (max-width: 360px) {
-  .epay-cashier__card { padding: 24px 16px 20px; }
-  .epay-cashier__amount-num { font-size: 38px; }
-  .epay-cashier__method-name { font-size: 14px; }
+  .checkout-cashier .checkout-card { padding: 22px 18px; }
 }
-@media (min-width: 481px) and (max-width: 768px) {
-  .epay-cashier__card { max-width: 420px; }
+@media (prefers-reduced-motion: reduce) {
+  .checkout-cashier .checkout-button, .checkout-cashier .checkout-method__surface { transition: none; }
 }
