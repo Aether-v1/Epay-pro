@@ -458,6 +458,9 @@ function returnTemplate($return_url) {
     exit;
 }
 function submitTemplate($html_text){
+	global $sitename, $conf;
+	$merchantName = !empty($sitename) ? $sitename : (isset($conf['sitename']) ? $conf['sitename'] : '');
+	$merchantName = safe_html($merchantName);
 	?>
     <!DOCTYPE html>
     <html lang="zh-CN">
@@ -465,20 +468,25 @@ function submitTemplate($html_text){
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>正在前往支付页面</title>
-        <link href="/assets/css/checkout.css?v=1" rel="stylesheet" media="screen">
+        <meta name="theme-color" content="#f5f5f7">
+        <link href="/assets/css/checkout.css?v=4" rel="stylesheet" media="screen">
+        <script>document.documentElement.classList.add('checkout-js');</script>
     </head>
-    <body class="epay-page">
-        <div class="epay-card">
-            <div class="epay-transition">
-                <div class="epay-transition__icon"><span class="epay-spinner" role="status" aria-label="正在跳转"></span></div>
-                <h1 class="epay-transition__title">正在前往安全支付页面</h1>
-                <p class="epay-transition__desc">正在为你连接支付渠道，请稍候...</p>
-                <div class="epay-status__actions">
-                    <a href="javascript:void(0)" id="epay-continue-pay" class="epay-btn epay-btn--primary">若没有自动跳转，请点击继续支付</a>
+    <body class="checkout-page checkout-transition-page">
+        <main class="checkout-shell">
+            <div class="checkout-brand"><img src="/assets/img/logo.png" alt=""><?php echo $merchantName ?></div>
+            <div class="checkout-card checkout-status" role="status">
+                <div class="checkout-status-icon"><span class="checkout-spinner" aria-hidden="true"></span></div>
+                <p class="checkout-eyebrow">安全支付 · 正在跳转</p>
+                <h1 class="checkout-status-title">正在前往支付页面</h1>
+                <p class="checkout-status-desc">正在为你连接支付渠道，请稍候…</p>
+                <div class="checkout-actions">
+                    <a href="javascript:void(0)" id="epay-continue-pay" class="checkout-button">若未自动跳转，点击继续支付</a>
                 </div>
             </div>
-        </div>
-        <?php echo $html_text?>
+            <p class="checkout-footer"><?php echo $merchantName ?></p>
+        </main>
+        <div class="checkout-payload"><?php echo $html_text?></div>
         <script>
         (function(){
             var a = document.getElementById('epay-continue-pay');

@@ -1086,3 +1086,113 @@ body.checkout-cashier {
 @media (prefers-reduced-motion: reduce) {
   .checkout-cashier .checkout-button, .checkout-cashier .checkout-method__surface { transition: none; }
 }
+
+/* ---------- 32. Submit transition — same visual system as cashier ---------- */
+body.checkout-transition-page {
+  --ck-bg: #f5f5f7;
+  --ck-card: #fff;
+  --ck-text: #1d1d1f;
+  --ck-muted: #6e6e73;
+  --ck-soft: #86868b;
+  --ck-line: #e5e5ea;
+  --ck-shadow: 0 20px 60px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.03);
+  color-scheme: light;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ck-bg);
+  color: var(--ck-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.checkout-transition-page *, .checkout-transition-page *::before, .checkout-transition-page *::after { box-sizing: border-box; }
+.checkout-transition-page .checkout-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+.checkout-transition-page .checkout-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 0 22px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.checkout-transition-page .checkout-brand img { width: 30px; height: 30px; object-fit: contain; }
+.checkout-transition-page .checkout-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 38px 32px 32px;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 26px;
+  background: var(--ck-card);
+  box-shadow: var(--ck-shadow);
+}
+.checkout-transition-page .checkout-status { text-align: center; }
+.checkout-transition-page .checkout-status-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: var(--ck-bg);
+  color: var(--ck-text);
+}
+.checkout-transition-page .checkout-spinner {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border: 3px solid var(--ck-line);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: checkout-transition-spin .8s linear infinite;
+}
+@keyframes checkout-transition-spin { to { transform: rotate(360deg); } }
+.checkout-transition-page .checkout-eyebrow { margin: 0 0 8px; color: var(--ck-muted); font-size: 13px; }
+.checkout-transition-page .checkout-status-title { margin: 0 0 9px; font-size: 22px; line-height: 1.4; font-weight: 650; }
+.checkout-transition-page .checkout-status-desc { margin: 0; color: var(--ck-muted); font-size: 14px; line-height: 1.7; }
+.checkout-transition-page .checkout-actions { margin-top: 27px; }
+.checkout-transition-page .checkout-button,
+.checkout-transition-page .checkout-payload input[type="submit"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 54px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 15px;
+  background: var(--ck-text);
+  color: #fff;
+  text-decoration: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.checkout-transition-page .checkout-button:hover,
+.checkout-transition-page .checkout-payload input[type="submit"]:hover { background: #000; color: #fff; }
+.checkout-transition-page .checkout-button:focus-visible,
+.checkout-transition-page .checkout-payload input[type="submit"]:focus-visible { outline: 3px solid #698df6; outline-offset: 3px; }
+.checkout-transition-page .checkout-footer { margin: 24px 0 0; color: var(--ck-soft); font-size: 12px; text-align: center; overflow-wrap: anywhere; }
+html.checkout-js .checkout-transition-page .checkout-payload { display: none; }
+.checkout-transition-page .checkout-payload { width: min(100% - 32px, 480px); margin: 0 auto 32px; }
+.checkout-transition-page .checkout-payload form { margin: 0; }
+html:not(.checkout-js) .checkout-transition-page .checkout-shell { min-height: 0; padding-bottom: 18px; }
+html:not(.checkout-js) .checkout-transition-page #epay-continue-pay { display: none; }
+@media (max-width: 480px) {
+  .checkout-transition-page .checkout-shell { justify-content: flex-start; padding: 24px 16px 32px; }
+  .checkout-transition-page .checkout-card { padding: 34px 22px 28px; border-radius: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .checkout-transition-page .checkout-spinner { animation-duration: 1.5s; }
+}
